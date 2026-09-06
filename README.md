@@ -17,6 +17,7 @@ is produced by the commands below.
 | `scripts/run_lcs.py` | MOSFiT light curves for a catalog |
 | `scripts/postprocess.py` | Disk screen, infrared echoes, luminosity functions, survey yields, figures, table rows |
 | `scripts/variant_table.py` | Collects the variant results into `tables/variant_rows.tex` |
+| `scripts/run_all.py` | Runs steps 3-4 below for every catalog, several catalogs at a time (`--workers N`) |
 | `scripts/parse_yao2023.py` | Per-event ZTF sample of Yao et al. (2023) used in Figure 2 |
 | `scripts/build_bib.py`, `scripts/ads_validate.py` | Bibliography from ADS bibcodes (`scripts/bibcodes.json`) |
 | `scripts/check_abstract.py` | arXiv abstract length / macro check |
@@ -57,6 +58,7 @@ for c in fiducial prompt gaslimited burstrelation simple scaleeff young1 young0 
   PY scripts/postprocess.py $c
 done
 python scripts/variant_table.py
+# (steps 3-4 in one go, catalogs in parallel, logging to products/run_all.log: PY scripts/run_all.py --workers 8)
 
 # 5. Observed comparison sample (Figure 2); needs the Yao et al. (2023) text in research/y2023/
 PY scripts/parse_yao2023.py

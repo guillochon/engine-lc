@@ -27,8 +27,8 @@ BANDS = ['UVW2', 'u', 'g', 'r', 'i', 'z', 'y', 'VIS', 'YE', 'JE', 'HE',
          'F062', 'F106', 'F146', 'F158', 'F213', 'W1', 'W2', 'S1', 'S2', 'S3', 'S4', 'S5', 'S6']
 INSTS = ['UVOT'] + ['LSST'] * 6 + ['VIS'] + ['NISP'] * 3 + ['WFI'] * 5 + ['WISE'] * 2 + ['SPHEREx'] * 6
 # observer-frame days after first fallback
-T_OBS = np.concatenate([[0.5], np.logspace(0, np.log10(3000.0), 119)])
-T_REST_GRID = np.logspace(-1, np.log10(4000.0), 160)   # rest-frame days for bolometric storage
+T_OBS = np.concatenate([[0.5], np.logspace(0, np.log10(36525.0), 149)])   # to 100 yr, so the rest-frame flare is followed for decades
+T_REST_GRID = np.logspace(-1, np.log10(40000.0), 200)   # rest-frame days for bolometric storage (110 yr)
 
 
 def make_model():

@@ -132,14 +132,15 @@ def gband_thalf(mags_g, t_obs, z):
     return out
 
 
-def echo(L_rest, t_rest, mh, cosi, fomega=ps.F_OMEGA, r_in_pc=None, smooth=True):
+def echo(L_rest, t_rest, mh, cosi, fomega=ps.F_OMEGA, r_in_pc=None, smooth=True, t_max_yr=None):
     """Infrared echo light curve (erg/s) from the inner face of the disk.
     Returns (t_yr, L_IR, T_barvainis, T_gray)."""
     m6 = mh / 1e6
     # inner edge r_b - R_MC with the f_* = 0.22 scalings (scripts/engine_window_exponents.py)
     r_in = (4.8 * m6 ** 1.00 - 0.71 * m6 ** 1.49 if r_in_pc is None else r_in_pc) * PC
     tau0 = r_in / C / YR
-    tgrid = np.linspace(0, 2.2 * tau0 + 6, 2400)                # yr
+    span = max(2.2 * tau0 + 6, t_max_yr or 0.0)                 # yr; t_max_yr extends the grid past the ring's own window
+    tgrid = np.linspace(0, span, int(2400 * span / (2.2 * tau0 + 6)))
     dt = tgrid[1] - tgrid[0]
     # never let the ring collapse below ~one grid cell (exactly face-on limit)
     sini = max(np.sqrt(max(1 - cosi ** 2, 0.0)), 1.5 * dt / tau0)
@@ -491,7 +492,7 @@ def main(tag='fiducial'):
     # the parsec-scale, AGN-like torus fitted to 1eRASS J0758 by Eyles-Ferris et al. (2026)
     for rpc, fc, ci, lab in [(0.15, 0.01, 0.7, r'$0.15$ pc, $f_c=0.01$ (optical TDE echoes)'),
                              (2.4, 0.3, 0.53, r'$2.4$ pc, $f_c=0.3$ (1eRASS J0758 torus)')]:
-        tg, Lir, _, _, _ = echo(e['lbol'][j].astype(float), t_rest, e['mh'][j], ci, fomega=fc, r_in_pc=rpc, smooth=False)
+        tg, Lir, _, _, _ = echo(e['lbol'][j].astype(float), t_rest, e['mh'][j], ci, fomega=fc, r_in_pc=rpc, smooth=False, t_max_yr=2.2 * tau0 + 2)
         ax[0].plot(tg, Lir, color='tab:gray', ls='-' if rpc < 1 else '--', lw=0.9, label=lab)
     ax[0].set_yscale('log'); ax[0].set_ylim(1e40, 3e45); ax[0].set_xlim(-0.5, 2.2 * tau0 + 2)
     ax[0].set_xlabel('years after disruption'); ax[0].set_ylabel(r'$L$ (erg s$^{-1}$)'); ax[0].legend(fontsize=4.8, loc='upper right', frameon=False, handlelength=1.8)

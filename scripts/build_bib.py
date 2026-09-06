@@ -64,6 +64,13 @@ keys.update({
     'Nair:2026a': '2026ApJ..1007...40N',         # suppressed rate of luminous mid-IR TDEs
     'Ramsden:2026a': '2026ApJ...998L..25R',      # undermassive SMBHs in quenched TDE hosts
     'Mummery:2026a': '2026arXiv260114483M',      # TDEFLARE optical-flare mass inference, Malmquist-Hills bias
+    # software acknowledgments
+    'Astropy:2013a': '2013A&A...558A..33A',
+    'Astropy:2018a': '2018AJ....156..123A',
+    'Harris:2020a': '2020Natur.585..357H',        # numpy
+    'Virtanen:2020a': '2020NaMet..17..261V',      # scipy
+    'Hunter:2007a': '2007CSE.....9...90H',        # matplotlib
+    'Barbary:2016a': '2016zndo....804967B',      # extinction
 })
 
 bibcodes = list(keys.values())
