@@ -64,6 +64,14 @@ keys.update({
     'Nair:2026a': '2026ApJ..1007...40N',         # suppressed rate of luminous mid-IR TDEs
     'Ramsden:2026a': '2026ApJ...998L..25R',      # undermassive SMBHs in quenched TDE hosts
     'Mummery:2026a': '2026arXiv260114483M',      # TDEFLARE optical-flare mass inference, Malmquist-Hills bias
+    # what sets the optical photosphere temperature
+    'Guillochon:2014a': '2014ApJ...783...23G',     # PS1-10jh: photosphere at the first species not fully ionized (helium)
+    'Roth:2016a': '2016ApJ...827....3R',           # radiative transfer: He II recombination front as the photosphere
+    'Roth:2018a': '2018ApJ...855...54R',           # line profiles from electron-scattering outflows
+    'Cao:2018a': '2018arXiv181006358C',            # failed outflow, line-absorption thermostat at 1-5e4 K
+    'Piro:2020a': '2020ApJ...894....2P',           # wind-reprocessed transients, scattering-dominated temperature
+    'Lu:2020a': '2020MNRAS.492..686L',             # collision-induced outflow reprocessing
+    'Parkinson:2022a': '2022MNRAS.510.5426P',      # Monte Carlo wind reprocessing spectra
     # software acknowledgments
     'Astropy:2013a': '2013A&A...558A..33A',
     'Astropy:2018a': '2018AJ....156..123A',
