@@ -446,6 +446,8 @@ def main(tag='fiducial'):
             ob = bins[::3]   # coarser bins for 33 events
             a.hist(observed[k], bins=ob, weights=y_rate / (3 * bw), histtype='step', color='tab:blue', lw=1.2, ls='--', label=r'observed (ZTF, $\sum 1/V_{\rm max}$)')
         a.set_xlabel(lab); a.set_yscale('log'); a.set_ylim(3e-10, 3e-5)
+        if k == 0: a.set_ylim(3e-10, 3e-4)      # headroom for the legend
+        if k == 1: a.invert_xaxis()             # brighter (more negative) magnitudes to the right
     for a in ax[:, 0]:
         a.set_ylabel(r'd$\dot n$/d$x$ (Mpc$^{-3}$ yr$^{-1}$ dex$^{-1}$ or mag$^{-1}$)')
     ax[0, 0].legend(loc='upper left', fontsize=5.5, frameon=False)
