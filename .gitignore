@@ -1,0 +1,23 @@
+# secrets
+.env
+
+# MOSFiT light-curve libraries and catalogs (regenerate; see README)
+products/*.npz
+
+# MOSFiT filter cache (downloaded from SVO on demand)
+modules/observables/filters/
+
+# LaTeX build products
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+engine-lc.pdf
+
+# python
+__pycache__/
+*.pyc

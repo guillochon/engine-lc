@@ -1,0 +1,2569 @@
+[
+ {
+  "@note": "List of rules to find the right filter for each observation. Generic rules should go near the top of the file, whereas instrument/telescope-specific rules should go near the bottom."
+ },
+ {
+  "filters": {
+   "white": {
+    "min_wavelength": 50,
+    "max_wavelength": 14990,
+    "delta_wavelength": 10
+   }
+  }
+ },
+ {
+  "systems": [
+   "AB"
+  ],
+  "filters": {
+   "U": {
+    "SVO": "Generic/Bessell.U",
+    "offset": 0
+   },
+   "B": {
+    "SVO": "Generic/Bessell.B",
+    "offset": 0
+   },
+   "V": {
+    "SVO": "Generic/Bessell.V",
+    "offset": 0
+   },
+   "R": {
+    "SVO": "Generic/Bessell.R",
+    "offset": 0
+   },
+   "I": {
+    "SVO": "Generic/Bessell.I",
+    "offset": 0
+   },
+   "J": {
+    "SVO": "2MASS/2MASS.J",
+    "offset": 0
+   },
+   "H": {
+    "SVO": "2MASS/2MASS.H",
+    "offset": 0
+   },
+   "K": {
+    "SVO": "2MASS/2MASS.Ks",
+    "offset": 0
+   },
+   "Ks": {
+    "SVO": "2MASS/2MASS.Ks",
+    "offset": 0
+   },
+   "Y": {
+    "SVO": "LCO/CSP.Y",
+    "offset": 0
+   },
+   "u": {
+    "SVO": "SLOAN/SDSS.u",
+    "offset": 0
+   },
+   "g": {
+    "SVO": "SLOAN/SDSS.g",
+    "offset": 0
+   },
+   "r": {
+    "SVO": "SLOAN/SDSS.r",
+    "offset": 0
+   },
+   "i": {
+    "SVO": "SLOAN/SDSS.i",
+    "offset": 0
+   },
+   "z": {
+    "SVO": "SLOAN/SDSS.z",
+    "offset": 0
+   },
+   "uprime_filter": {
+    "SVO": "SLOAN/SDSS.uprime_filter",
+    "offset": 0
+   },
+   "gprime_filter": {
+    "SVO": "SLOAN/SDSS.gprime_filter",
+    "offset": 0
+   },
+   "rprime_filter": {
+    "SVO": "SLOAN/SDSS.rprime_filter",
+    "offset": 0
+   },
+   "iprime_filter": {
+    "SVO": "SLOAN/SDSS.iprime_filter",
+    "offset": 0
+   },
+   "zprime_filter": {
+    "SVO": "SLOAN/SDSS.zprime_filter",
+    "offset": 0
+   },
+   "ROTSE": {
+    "SVO": "Generic/Bessell.R",
+    "offset": 0
+   },
+   "Z": {
+    "SVO": "CFHT/CFHT.Z",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "systems": [
+   "Vega"
+  ],
+  "filters": {
+   "U": {
+    "SVO": "Generic/Bessell.U"
+   },
+   "B": {
+    "SVO": "Generic/Bessell.B"
+   },
+   "V": {
+    "SVO": "Generic/Bessell.V"
+   },
+   "R": {
+    "SVO": "Generic/Bessell.R"
+   },
+   "I": {
+    "SVO": "Generic/Bessell.I"
+   },
+   "J": {
+    "SVO": "2MASS/2MASS.J"
+   },
+   "H": {
+    "SVO": "2MASS/2MASS.H"
+   },
+   "K": {
+    "SVO": "2MASS/2MASS.Ks"
+   },
+   "Ks": {
+    "SVO": "2MASS/2MASS.Ks"
+   },
+   "Y": {
+    "SVO": "LCO/CSP.Y"
+   },
+   "u": {
+    "SVO": "SLOAN/SDSS.u"
+   },
+   "g": {
+    "SVO": "SLOAN/SDSS.g"
+   },
+   "r": {
+    "SVO": "SLOAN/SDSS.r"
+   },
+   "i": {
+    "SVO": "SLOAN/SDSS.i"
+   },
+   "z": {
+    "SVO": "SLOAN/SDSS.z"
+   },
+   "uprime_filter": {
+    "SVO": "SLOAN/SDSS.uprime_filter"
+   },
+   "gprime_filter": {
+    "SVO": "SLOAN/SDSS.gprime_filter"
+   },
+   "rprime_filter": {
+    "SVO": "SLOAN/SDSS.rprime_filter"
+   },
+   "iprime_filter": {
+    "SVO": "SLOAN/SDSS.iprime_filter"
+   },
+   "zprime_filter": {
+    "SVO": "SLOAN/SDSS.zprime_filter"
+   },
+   "ROTSE": {
+    "SVO": "Generic/Bessell.R"
+   },
+   "Z": {
+    "SVO": "CFHT/CFHT.Z"
+   }
+  }
+ },
+ {
+  "bandsets": [
+   "Standard",
+   ""
+  ],
+  "filters": {
+   "U": {
+    "SVO": "Generic/Bessell.U"
+   },
+   "B": {
+    "SVO": "Generic/Bessell.B"
+   },
+   "V": {
+    "SVO": "Generic/Bessell.V"
+   },
+   "R": {
+    "SVO": "Generic/Bessell.R"
+   },
+   "I": {
+    "SVO": "Generic/Bessell.I"
+   },
+   "J": {
+    "SVO": "2MASS/2MASS.J"
+   },
+   "H": {
+    "SVO": "2MASS/2MASS.H"
+   },
+   "K": {
+    "SVO": "2MASS/2MASS.Ks"
+   },
+   "Ks": {
+    "SVO": "2MASS/2MASS.Ks"
+   },
+   "u": {
+    "SVO": "SLOAN/SDSS.u",
+    "offset": 0
+   },
+   "g": {
+    "SVO": "SLOAN/SDSS.g",
+    "offset": 0
+   },
+   "r": {
+    "SVO": "SLOAN/SDSS.r",
+    "offset": 0
+   },
+   "i": {
+    "SVO": "SLOAN/SDSS.i",
+    "offset": 0
+   },
+   "z": {
+    "SVO": "SLOAN/SDSS.z",
+    "offset": 0
+   },
+   "u'": {
+    "SVO": "SLOAN/SDSS.u",
+    "offset": 0
+   },
+   "g'": {
+    "SVO": "SLOAN/SDSS.g",
+    "offset": 0
+   },
+   "r'": {
+    "SVO": "SLOAN/SDSS.r",
+    "offset": 0
+   },
+   "i'": {
+    "SVO": "SLOAN/SDSS.i",
+    "offset": 0
+   },
+   "z'": {
+    "SVO": "SLOAN/SDSS.z",
+    "offset": 0
+   },
+   "FUV": {
+    "SVO": "GALEX/GALEX.FUV",
+    "offset": 0
+   },
+   "NUV": {
+    "SVO": "GALEX/GALEX.NUV",
+    "offset": 0
+   },
+   "Z": {
+    "SVO": "CFHT/CFHT.Z"
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "ROTSE"
+  ],
+  "instruments": [
+   "",
+   "ROTSE"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "filters": {
+   "ROTSE": {
+    "SVO": "Generic/Bessell.R",
+    "offset": 0
+   },
+   "R": {
+    "SVO": "Generic/Bessell.R",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "CTIO",
+   "DECam"
+  ],
+  "instruments": [
+   "",
+   "DECam"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "filters": {
+   "u": {
+    "SVO": "CTIO/DECam.u",
+    "offset": 0
+   },
+   "g": {
+    "SVO": "CTIO/DECam.g",
+    "offset": 0
+   },
+   "r": {
+    "SVO": "CTIO/DECam.r",
+    "offset": 0
+   },
+   "i": {
+    "SVO": "CTIO/DECam.i",
+    "offset": 0
+   },
+   "z": {
+    "SVO": "CTIO/DECam.z",
+    "offset": 0
+   },
+   "VR": {
+    "SVO": "CTIO/DECam.VR_filter",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Spitzer"
+  ],
+  "instruments": [
+   "",
+   "Spitzer"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "filters": {
+   "F36": {
+    "SVO": "Spitzer/IRAC.I1",
+    "offset": 0
+   },
+   "F45": {
+    "SVO": "Spitzer/IRAC.I2",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "LCO"
+  ],
+  "instruments": [
+   "",
+   "LDSS",
+   "LDSS3",
+   "LDSS-3"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "filters": {
+   "g": {
+    "SVO": "SLOAN/SDSS.g",
+    "offset": 0
+   },
+   "r": {
+    "SVO": "SLOAN/SDSS.r",
+    "offset": 0
+   },
+   "i": {
+    "SVO": "SLOAN/SDSS.i",
+    "offset": 0
+   },
+   "z": {
+    "SVO": "SLOAN/SDSS.z",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Gemini"
+  ],
+  "instruments": [
+   "",
+   "Flamingos2"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "filters": {
+   "Y": {
+    "SVO": "Gemini/Flamingos2.Y",
+    "offset": 0
+   },
+   "J": {
+    "SVO": "Gemini/Flamingos2.J",
+    "offset": 0
+   },
+   "H": {
+    "SVO": "Gemini/Flamingos2.H",
+    "offset": 0
+   },
+   "Kss": {
+    "SVO": "Gemini/Flamingos2.Ks",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "ROTSE"
+  ],
+  "instruments": [
+   "",
+   "ROTSE"
+  ],
+  "systems": [
+   "Vega"
+  ],
+  "filters": {
+   "ROTSE": {
+    "SVO": "Generic/Bessell.R"
+   },
+   "R": {
+    "SVO": "Generic/Bessell.R"
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "GALEX"
+  ],
+  "instruments": [
+   "",
+   "GALEX"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "filters": {
+   "FUV": {
+    "SVO": "GALEX/GALEX.FUV",
+    "offset": 0
+   },
+   "NUV": {
+    "SVO": "GALEX/GALEX.NUV",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "skymapper",
+   "SkyMapper"
+  ],
+  "instruments": [
+   "",
+   "skymapper",
+   "SkyMapper"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "filters": {
+   "u": {
+    "SVO": "SkyMapper/SkyMapper.u",
+    "offset": 0
+   },
+   "v": {
+    "SVO": "SkyMapper/SkyMapper.v",
+    "offset": 0
+   },
+   "g": {
+    "SVO": "SkyMapper/SkyMapper.g",
+    "offset": 0
+   },
+   "r": {
+    "SVO": "SkyMapper/SkyMapper.r",
+    "offset": 0
+   },
+   "i": {
+    "SVO": "SkyMapper/SkyMapper.i",
+    "offset": 0
+   },
+   "z": {
+    "SVO": "SkyMapper/SkyMapper.z",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "GALEX"
+  ],
+  "instruments": [
+   "",
+   "GALEX"
+  ],
+  "systems": [
+   "Vega"
+  ],
+  "filters": {
+   "FUV": {
+    "SVO": "GALEX/GALEX.FUV"
+   },
+   "NUV": {
+    "SVO": "GALEX/GALEX.NUV"
+   }
+  }
+ },
+ {
+  "instruments": [
+   "CFH12k",
+   "P48"
+  ],
+  "systems": [
+   "AB"
+  ],
+  "filters": {
+   "R": {
+    "SVO": "CFHT/CFH12k.R"
+   },
+   "r": {
+    "SVO": "CFHT/CFH12k.R"
+   },
+   "g": {
+    "SVO": "SLOAN/SDSS.g"
+   }
+  }
+ },
+ {
+  "instruments": [
+   "P200"
+  ],
+  "filters": {
+   "Ks": {
+    "SVO": "P200/WIRC.Ks"
+   },
+   "J_ori": {
+    "SVO": "P200/WIRC.J_ori"
+   }
+  }
+ },
+ {
+  "bandsets": [
+   "Bessell"
+  ],
+  "filters": {
+   "U": {
+    "SVO": "Generic/Bessell.U"
+   },
+   "B": {
+    "SVO": "Generic/Bessell.B"
+   },
+   "V": {
+    "SVO": "Generic/Bessell.V"
+   },
+   "R": {
+    "SVO": "Generic/Bessell.R"
+   },
+   "I": {
+    "SVO": "Generic/Bessell.I"
+   }
+  }
+ },
+ {
+  "systems": [
+   "",
+   "Vega",
+   "Landolt"
+  ],
+  "bandsets": [
+   "Cousins"
+  ],
+  "filters": {
+   "R": {
+    "SVO": "Generic/Cousins.R"
+   },
+   "I": {
+    "SVO": "Generic/Cousins.I"
+   },
+   "Rc": {
+    "SVO": "Generic/Cousins.R"
+   },
+   "Ic": {
+    "SVO": "Generic/Cousins.I"
+   }
+  }
+ },
+ {
+  "systems": [
+   "SDSS"
+  ],
+  "instruments": [
+   "SDSS"
+  ],
+  "bandsets": [
+   "",
+   "SDSS"
+  ],
+  "filters": {
+   "u": {
+    "SVO": "SLOAN/SDSS.u",
+    "offset": 0
+   },
+   "g": {
+    "SVO": "SLOAN/SDSS.g",
+    "offset": 0
+   },
+   "r": {
+    "SVO": "SLOAN/SDSS.r",
+    "offset": 0
+   },
+   "i": {
+    "SVO": "SLOAN/SDSS.i",
+    "offset": 0
+   },
+   "z": {
+    "SVO": "SLOAN/SDSS.z",
+    "offset": 0
+   },
+   "uprime_filter": {
+    "SVO": "SLOAN/SDSS.uprime_filter",
+    "offset": 0
+   },
+   "gprime_filter": {
+    "SVO": "SLOAN/SDSS.gprime_filter",
+    "offset": 0
+   },
+   "rprime_filter": {
+    "SVO": "SLOAN/SDSS.rprime_filter",
+    "offset": 0
+   },
+   "iprime_filter": {
+    "SVO": "SLOAN/SDSS.iprime_filter",
+    "offset": 0
+   },
+   "zprime_filter": {
+    "SVO": "SLOAN/SDSS.zprime_filter",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Liverpool"
+  ],
+  "systems": [
+   "Vega"
+  ],
+  "instruments": [
+   "",
+   "IOI",
+   "IOO"
+  ],
+  "filters": {
+   "H": {
+    "SVO": "Liverpool/IOI.H"
+   },
+   "u": {
+    "SVO": "Liverpool/IOO.SDSS-u"
+   },
+   "r": {
+    "SVO": "Liverpool/IOO.SDSS-r"
+   },
+   "Halpha": {
+    "SVO": "Liverpool/IOO.Halpha"
+   },
+   "Halpha-6634": {
+    "SVO": "Liverpool/IOO.Halpha-6634"
+   },
+   "Halpha-6755": {
+    "SVO": "Liverpool/IOO.Halpha-6755"
+   },
+   "Halpha-6822": {
+    "SVO": "Liverpool/IOO.Halpha-6822"
+   },
+   "i": {
+    "SVO": "Liverpool/IOO.SDSS-i"
+   },
+   "z": {
+    "SVO": "Liverpool/IOO.SDSS-z"
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Liverpool"
+  ],
+  "systems": [
+   "AB"
+  ],
+  "instruments": [
+   "",
+   "IOI",
+   "IOO"
+  ],
+  "filters": {
+   "H": {
+    "SVO": "Liverpool/IOI.H",
+    "offset": 0
+   },
+   "u": {
+    "SVO": "Liverpool/IOO.SDSS-u",
+    "offset": 0
+   },
+   "r": {
+    "SVO": "Liverpool/IOO.SDSS-r",
+    "offset": 0
+   },
+   "Halpha": {
+    "SVO": "Liverpool/IOO.Halpha",
+    "offset": 0
+   },
+   "Halpha-6634": {
+    "SVO": "Liverpool/IOO.Halpha-6634",
+    "offset": 0
+   },
+   "Halpha-6755": {
+    "SVO": "Liverpool/IOO.Halpha-6755",
+    "offset": 0
+   },
+   "Halpha-6822": {
+    "SVO": "Liverpool/IOO.Halpha-6822",
+    "offset": 0
+   },
+   "i": {
+    "SVO": "Liverpool/IOO.SDSS-i",
+    "offset": 0
+   },
+   "z": {
+    "SVO": "Liverpool/IOO.SDSS-z",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Astrosat"
+  ],
+  "systems": [
+   "Vega"
+  ],
+  "instruments": [
+   "",
+   "UVIT"
+  ],
+  "filters": {
+   "F148W": {
+    "SVO": "Astrosat/UVIT.F148W"
+   },
+   "F148Wa": {
+    "SVO": "Astrosat/UVIT.F148Wa"
+   },
+   "F154W": {
+    "SVO": "Astrosat/UVIT.F154W"
+   },
+   "F169M": {
+    "SVO": "Astrosat/UVIT.F169M"
+   },
+   "F172M": {
+    "SVO": "Astrosat/UVIT.F172M"
+   },
+   "N219M": {
+    "SVO": "Astrosat/UVIT.N219M"
+   },
+   "N242W": {
+    "SVO": "Astrosat/UVIT.N242W"
+   },
+   "N245M": {
+    "SVO": "Astrosat/UVIT.N245M"
+   },
+   "N263M": {
+    "SVO": "Astrosat/UVIT.N263M"
+   },
+   "N279N": {
+    "SVO": "Astrosat/UVIT.N279N"
+   },
+   "VIS1": {
+    "SVO": "Astrosat/UVIT.VIS1"
+   },
+   "VIS2": {
+    "SVO": "Astrosat/UVIT.VIS2"
+   },
+   "BK7": {
+    "SVO": "Astrosat/UVIT.BK7"
+   },
+   "ND1": {
+    "SVO": "Astrosat/UVIT.ND1"
+   },
+   "VIS3": {
+    "SVO": "Astrosat/UVIT.VIS3"
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Astrosat"
+  ],
+  "systems": [
+   "AB"
+  ],
+  "instruments": [
+   "",
+   "UVIT"
+  ],
+  "filters": {
+   "F148W": {
+    "SVO": "Astrosat/UVIT.F148W",
+    "offset": 0
+   },
+   "F148Wa": {
+    "SVO": "Astrosat/UVIT.F148Wa",
+    "offset": 0
+   },
+   "F154W": {
+    "SVO": "Astrosat/UVIT.F154W",
+    "offset": 0
+   },
+   "F169M": {
+    "SVO": "Astrosat/UVIT.F169M",
+    "offset": 0
+   },
+   "F172M": {
+    "SVO": "Astrosat/UVIT.F172M",
+    "offset": 0
+   },
+   "N219M": {
+    "SVO": "Astrosat/UVIT.N219M",
+    "offset": 0
+   },
+   "N242W": {
+    "SVO": "Astrosat/UVIT.N242W",
+    "offset": 0
+   },
+   "N245M": {
+    "SVO": "Astrosat/UVIT.N245M",
+    "offset": 0
+   },
+   "N263M": {
+    "SVO": "Astrosat/UVIT.N263M",
+    "offset": 0
+   },
+   "N279N": {
+    "SVO": "Astrosat/UVIT.N279N",
+    "offset": 0
+   },
+   "VIS1": {
+    "SVO": "Astrosat/UVIT.VIS1",
+    "offset": 0
+   },
+   "VIS2": {
+    "SVO": "Astrosat/UVIT.VIS2",
+    "offset": 0
+   },
+   "BK7": {
+    "SVO": "Astrosat/UVIT.BK7",
+    "offset": 0
+   },
+   "ND1": {
+    "SVO": "Astrosat/UVIT.ND1",
+    "offset": 0
+   },
+   "VIS3": {
+    "SVO": "Astrosat/UVIT.VIS3",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Swift"
+  ],
+  "systems": [
+   "",
+   "Vega"
+  ],
+  "instruments": [
+   "UVOT"
+  ],
+  "bandsets": [
+   "",
+   "Swift",
+   "UVOT"
+  ],
+  "filters": {
+   "U": {
+    "SVO": "Swift/UVOT.U"
+   },
+   "B": {
+    "SVO": "Swift/UVOT.B"
+   },
+   "V": {
+    "SVO": "Swift/UVOT.V"
+   },
+   "UVW1": {
+    "SVO": "Swift/UVOT.UVW1"
+   },
+   "UVW2": {
+    "SVO": "Swift/UVOT.UVW2"
+   },
+   "UVM2": {
+    "SVO": "Swift/UVOT.UVM2"
+   },
+   "W1": {
+    "SVO": "Swift/UVOT.UVW1"
+   },
+   "W2": {
+    "SVO": "Swift/UVOT.UVW2"
+   },
+   "M2": {
+    "SVO": "Swift/UVOT.UVM2"
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Swift"
+  ],
+  "systems": [
+   "AB"
+  ],
+  "instruments": [
+   "",
+   "UVOT"
+  ],
+  "bandsets": [
+   "",
+   "Swift",
+   "UVOT"
+  ],
+  "filters": {
+   "U": {
+    "SVO": "Swift/UVOT.U",
+    "offset": 0
+   },
+   "B": {
+    "SVO": "Swift/UVOT.B",
+    "offset": 0
+   },
+   "V": {
+    "SVO": "Swift/UVOT.V",
+    "offset": 0
+   },
+   "UVW1": {
+    "SVO": "Swift/UVOT.UVW1",
+    "offset": 0
+   },
+   "UVW2": {
+    "SVO": "Swift/UVOT.UVW2",
+    "offset": 0
+   },
+   "UVM2": {
+    "SVO": "Swift/UVOT.UVM2",
+    "offset": 0
+   },
+   "W1": {
+    "SVO": "Swift/UVOT.UVW1",
+    "offset": 0
+   },
+   "W2": {
+    "SVO": "Swift/UVOT.UVW2",
+    "offset": 0
+   },
+   "M2": {
+    "SVO": "Swift/UVOT.UVM2",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Gaia"
+  ],
+  "instruments": [
+   "",
+   "Gaia",
+   "Astrometric"
+  ],
+  "bandsets": [
+   "",
+   "Gaia"
+  ],
+  "filters": {
+   "G": {
+    "SVO": "GAIA/GAIA0.G",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "CTIO"
+  ],
+  "instruments": [
+   "",
+   "ANDICAM"
+  ],
+  "bandsets": [
+   "",
+   "ANDICAM"
+  ],
+  "filters": {
+   "J": {
+    "SVO": "CTIO/ANDICAM.J",
+    "offset": 0
+   },
+   "H": {
+    "SVO": "CTIO/ANDICAM.H",
+    "offset": 0
+   },
+   "K": {
+    "SVO": "CTIO/ANDICAM.K",
+    "offset": 0
+   },
+   "I_KPNO": {
+    "SVO": "CTIO/ANDICAM.I_KPNO",
+    "offset": 0
+   },
+   "B_KPNO": {
+    "SVO": "CTIO/ANDICAM.B_KPNO",
+    "offset": 0
+   },
+   "R_KPNO": {
+    "SVO": "CTIO/ANDICAM.R_KPNO",
+    "offset": 0
+   },
+   "V_KPNO": {
+    "SVO": "CTIO/ANDICAM.V_KPNO",
+    "offset": 0
+   },
+   "B_YALO": {
+    "SVO": "CTIO/ANDICAM.B_YALO",
+    "offset": 0
+   },
+   "R_YALO": {
+    "SVO": "CTIO/ANDICAM.B_YALO",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "LCO",
+   "Magellan"
+  ],
+  "instruments": [
+   "",
+   "FourStar"
+  ],
+  "bandsets": [
+   "",
+   "FourStar"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "filters": {
+   "J1": {
+    "SVO": "LCO/FourStar.J1",
+    "offset": 0
+   },
+   "Ks": {
+    "SVO": "LCO/FourStar.Ks",
+    "offset": 0
+   },
+   "J": {
+    "SVO": "LCO/FourStar.J",
+    "offset": 0
+   },
+   "H": {
+    "SVO": "LCO/FourStar.H",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "systems": [
+   "",
+   "AB"
+  ],
+  "telescopes": [
+   "",
+   "LCO"
+  ],
+  "instruments": [
+   "",
+   "IMACS"
+  ],
+  "bandsets": [
+   "",
+   "IMACS"
+  ],
+  "filters": {
+   "V": {
+    "SVO": "LCO/IMACS.Bessell_V1",
+    "offset": 0
+   },
+   "r": {
+    "SVO": "LCO/IMACS.sloan_r",
+    "offset": 0
+   },
+   "i": {
+    "SVO": "LCO/IMACS.sloan_i",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "systems": [
+   "",
+   "AB"
+  ],
+  "telescopes": [
+   "",
+   "IRSF"
+  ],
+  "instruments": [
+   "",
+   "SIRIUS"
+  ],
+  "filters": {
+   "J": {
+    "SVO": "Subaru/CIAO.J",
+    "offset": 0
+   },
+   "H": {
+    "SVO": "Subaru/CIAO.H",
+    "offset": 0
+   },
+   "Ks": {
+    "SVO": "Subaru/CIAO.Ks",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "systems": [
+   "",
+   "Vega"
+  ],
+  "telescopes": [
+   "",
+   "LaSilla"
+  ],
+  "instruments": [
+   "",
+   "SOFI"
+  ],
+  "filters": {
+   "H": {
+    "SVO": "LaSilla/SOFI.H"
+   },
+   "Ks": {
+    "SVO": "LaSilla/SOFI.Ks"
+   }
+  }
+ },
+ {
+  "systems": [
+   "",
+   "AB"
+  ],
+  "telescopes": [
+   "",
+   "LCO"
+  ],
+  "instruments": [
+   "",
+   "Sinistro"
+  ],
+  "filters": {
+   "w": {
+    "SVO": "PAN-STARRS/PS1.w",
+    "offset": 0
+   },
+   "g": {
+    "SVO": "PAN-STARRS/PS1.g",
+    "offset": 0
+   },
+   "V": {
+    "SVO": "Generic/Bessell.V",
+    "offset": 0
+   },
+   "r": {
+    "SVO": "PAN-STARRS/PS1.r",
+    "offset": 0
+   },
+   "i": {
+    "SVO": "PAN-STARRS/PS1.i",
+    "offset": 0
+   },
+   "z": {
+    "SVO": "PAN-STARRS/PS1.z",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "systems": [
+   "",
+   "AB"
+  ],
+  "telescopes": [
+   "",
+   "LaSilla"
+  ],
+  "instruments": [
+   "",
+   "EFOSC",
+   "GROND"
+  ],
+  "bandsets": [
+   "",
+   "EFOSC",
+   "GROND"
+  ],
+  "filters": {
+   "U": {
+    "SVO": "LaSilla/EFOSC.ESO640",
+    "offset": 0
+   },
+   "g": {
+    "SVO": "LaSilla/GROND.g",
+    "offset": 0
+   },
+   "V": {
+    "SVO": "LaSilla/EFOSC.ESO641",
+    "offset": 0
+   },
+   "r": {
+    "SVO": "LaSilla/GROND.r",
+    "offset": 0
+   },
+   "i": {
+    "SVO": "LaSilla/GROND.i",
+    "offset": 0
+   },
+   "z": {
+    "SVO": "LaSilla/GROND.z",
+    "offset": 0
+   },
+   "J": {
+    "SVO": "LaSilla/GROND.J",
+    "offset": 0
+   },
+   "H": {
+    "SVO": "LaSilla/GROND.H",
+    "offset": 0
+   },
+   "K": {
+    "SVO": "LaSilla/GROND.K",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "systems": [
+   "",
+   "AB"
+  ],
+  "telescopes": [
+   "",
+   "HST"
+  ],
+  "instruments": [
+   "",
+   "WFC3",
+   "WFC3_IR",
+   "ACS_WFC",
+   "ACS_SBC"
+  ],
+  "filters": {
+   "F105W": {
+    "SVO": "HST/WFC3_IR.F105W",
+    "offset": 0
+   },
+   "F110W": {
+    "SVO": "HST/WFC3_IR.F110W",
+    "offset": 0
+   },
+   "F125W": {
+    "SVO": "HST/WFC3_IR.F125W",
+    "offset": 0
+   },
+   "F140W": {
+    "SVO": "HST/WFC3_IR.F140W",
+    "offset": 0
+   },
+   "F160W": {
+    "SVO": "HST/WFC3_IR.F160W",
+    "offset": 0
+   },
+   "F435W": {
+    "SVO": "HST/ACS_WFC.F435W",
+    "offset": 0
+   },
+   "F475W": {
+    "SVO": "HST/ACS_WFC.F475W",
+    "offset": 0
+   },
+   "F555W": {
+    "SVO": "HST/ACS_WFC.F555W",
+    "offset": 0
+   },
+   "F606W": {
+    "SVO": "HST/ACS_WFC.F606W",
+    "offset": 0
+   },
+   "F625W": {
+    "SVO": "HST/ACS_WFC.F625W",
+    "offset": 0
+   },
+   "F775W": {
+    "SVO": "HST/ACS_WFC.F775W",
+    "offset": 0
+   },
+   "F814W": {
+    "SVO": "HST/ACS_WFC.F814W",
+    "offset": 0
+   },
+   "F850W": {
+    "SVO": "HST/ACS_WFC.F850LP",
+    "offset": 0
+   },
+   "F125LP": {
+    "SVO": "HST/ACS_SBC.F125LP",
+    "offset": 0
+   },
+   "F150LP": {
+    "SVO": "HST/ACS_SBC.F150LP",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Paranal"
+  ],
+  "instruments": [
+   "",
+   "FORS1"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "filters": {
+   "r": {
+    "SVO": "Paranal/FORS1.ESO1036",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "VST",
+   "Paranal"
+  ],
+  "instruments": [
+   "",
+   "OmegaCAM"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "filters": {
+   "g": {
+    "SVO": "Paranal/OmegaCAM.g_SDSS",
+    "offset": 0
+   },
+   "r": {
+    "SVO": "Paranal/OmegaCAM.r_SDSS",
+    "offset": 0
+   },
+   "i": {
+    "SVO": "Paranal/OmegaCAM.i_SDSS",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "VLT",
+   "Paranal"
+  ],
+  "instruments": [
+   "",
+   "FORS2",
+   "HAWKI"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "filters": {
+   "B": {
+    "SVO": "Paranal/FORS2.ESO1074",
+    "offset": 0
+   },
+   "V": {
+    "SVO": "Paranal/FORS2.ESO1075",
+    "offset": 0
+   },
+   "R": {
+    "SVO": "Paranal/FORS2.ESO1076",
+    "offset": 0
+   },
+   "I": {
+    "SVO": "Paranal/FORS2.ESO1077",
+    "offset": 0
+   },
+   "z": {
+    "SVO": "Paranal/FORS2.Gunn_z",
+    "offset": 0
+   },
+   "Ks": {
+    "SVO": "Paranal/HAWKI.Ks",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Gemini"
+  ],
+  "instruments": [
+   "",
+   "GMOS-S",
+   "GMOS-N"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "filters": {
+   "r": {
+    "SVO": "Gemini/GMOS-N.r",
+    "offset": 0
+   },
+   "i": {
+    "SVO": "Gemini/GMOS-N.i",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Subaru"
+  ],
+  "instruments": [
+   "",
+   "HSC"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "filters": {
+   "g": {
+    "SVO": "Subaru/HSC.g_filter",
+    "offset": 0
+   },
+   "G": {
+    "SVO": "Subaru/HSC.g_filter",
+    "offset": 0
+   },
+   "r2": {
+    "SVO": "Subaru/HSC.r2_filter",
+    "offset": 0
+   },
+   "R2": {
+    "SVO": "Subaru/HSC.r2_filter",
+    "offset": 0
+   },
+   "i2": {
+    "SVO": "Subaru/HSC.i2_filter",
+    "offset": 0
+   },
+   "I2": {
+    "SVO": "Subaru/HSC.i2_filter",
+    "offset": 0
+   },
+   "y": {
+    "SVO": "Subaru/HSC.Y_filter",
+    "offset": 0
+   },
+   "Y": {
+    "SVO": "Subaru/HSC.Y_filter",
+    "offset": 0
+   },
+   "z": {
+    "SVO": "Subaru/HSC.z_filter",
+    "offset": 0
+   },
+   "Z": {
+    "SVO": "Subaru/HSC.z_filter",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Subaru"
+  ],
+  "instruments": [
+   "MOIRCS"
+  ],
+  "systems": [
+   "AB",
+   ""
+  ],
+  "filters": {
+   "Ks": {
+    "SVO": "Subaru/MOIRCS.Ks",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "ABO"
+  ],
+  "instruments": [
+   "",
+   "NICFPS"
+  ],
+  "systems": [
+   "",
+   "Vega"
+  ],
+  "filters": {
+   "Ks": {
+    "SVO": "Subaru/CIAO.Ks"
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "REM"
+  ],
+  "instruments": [
+   "",
+   "ROS2"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "filters": {
+   "g": {
+    "SVO": "SLOAN/SDSS.g",
+    "offset": 0
+   },
+   "r": {
+    "SVO": "SLOAN/SDSS.r",
+    "offset": 0
+   },
+   "i": {
+    "SVO": "SLOAN/SDSS.i",
+    "offset": 0
+   },
+   "z": {
+    "SVO": "SLOAN/SDSS.z",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "Paranal",
+   "VLT"
+  ],
+  "instruments": [
+   "VIMOS"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "filters": {
+   "z": {
+    "SVO": "Paranal/VIMOS.z",
+    "offset": 0
+   },
+   "r": {
+    "SVO": "Paranal/VIMOS.r",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "VISTA"
+  ],
+  "instruments": [
+   "VIRCAM"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "filters": {
+   "Y": {
+    "SVO": "Paranal/VISTA.Y",
+    "offset": 0
+   },
+   "J": {
+    "SVO": "Paranal/VISTA.J",
+    "offset": 0
+   },
+   "Ks": {
+    "SVO": "Paranal/VISTA.Ks",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "IRSF"
+  ],
+  "instruments": [
+   "SIRIUS"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "filters": {
+   "g": {
+    "SVO": "SLOAN/SDSS.g",
+    "offset": 0
+   },
+   "r": {
+    "SVO": "SLOAN/SDSS.r",
+    "offset": 0
+   },
+   "i": {
+    "SVO": "SLOAN/SDSS.i",
+    "offset": 0
+   },
+   "z": {
+    "SVO": "SLOAN/SDSS.z",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "Swope"
+  ],
+  "instruments": [
+   "Swope"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "filters": {
+   "B": {
+    "SVO": "Generic/Bessell.B",
+    "offset": 0
+   },
+   "g": {
+    "SVO": "SLOAN/SDSS.g",
+    "offset": 0
+   },
+   "V": {
+    "SVO": "Generic/Bessell.V",
+    "offset": 0
+   },
+   "r": {
+    "SVO": "SLOAN/SDSS.r",
+    "offset": 0
+   },
+   "i": {
+    "SVO": "SLOAN/SDSS.i",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "B&C"
+  ],
+  "instruments": [
+   "Tripol5"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "filters": {
+   "g": {
+    "SVO": "SLOAN/SDSS.g",
+    "offset": 0
+   },
+   "r": {
+    "SVO": "SLOAN/SDSS.r",
+    "offset": 0
+   },
+   "i": {
+    "SVO": "SLOAN/SDSS.i",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Keck"
+  ],
+  "instruments": [
+   "",
+   "LRIS"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "filters": {
+   "g": {
+    "SVO": "Keck/LRIS.g",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Kepler"
+  ],
+  "instruments": [
+   "",
+   "Kepler"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "filters": {
+   "K": {
+    "SVO": "Kepler/Kepler.K",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Keck"
+  ],
+  "instruments": [
+   "",
+   "LRIS"
+  ],
+  "systems": [
+   "AB",
+   ""
+  ],
+  "filters": {
+   "I": {
+    "SVO": "Keck/LRIS.I"
+   }
+  }
+ },
+ {
+  "systems": [
+   "",
+   "AB"
+  ],
+  "telescopes": [
+   "",
+   "HST"
+  ],
+  "instruments": [
+   "",
+   "WFC3",
+   "UVIS",
+   "UVIS1"
+  ],
+  "filters": {
+   "F218W": {
+    "SVO": "HST/WFC3_UVIS1.F218W",
+    "offset": 0
+   },
+   "F225W": {
+    "SVO": "HST/WFC3_UVIS1.F225W",
+    "offset": 0
+   },
+   "F275W": {
+    "SVO": "HST/WFC3_UVIS1.F275W",
+    "offset": 0
+   },
+   "F336W": {
+    "SVO": "HST/WFC3_UVIS1.F336W",
+    "offset": 0
+   },
+   "F390W": {
+    "SVO": "HST/WFC3_UVIS1.F390W",
+    "offset": 0
+   },
+   "F438W": {
+    "SVO": "HST/WFC3_UVIS1.F438W",
+    "offset": 0
+   },
+   "F475W": {
+    "SVO": "HST/WFC3_UVIS1.F475W",
+    "offset": 0
+   },
+   "F555W": {
+    "SVO": "HST/WFC3_UVIS1.F555W",
+    "offset": 0
+   },
+   "F625W": {
+    "SVO": "HST/WFC3_UVIS1.F625W",
+    "offset": 0
+   },
+   "F775W": {
+    "SVO": "HST/WFC3_UVIS1.F775W",
+    "offset": 0
+   },
+   "F814W": {
+    "SVO": "HST/WFC3_UVIS1.F814W",
+    "offset": 0
+   },
+   "F606W": {
+    "SVO": "HST/WFC3_UVIS1.F606W",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "bandsets": [
+   "Johnson"
+  ],
+  "filters": {
+   "U": {
+    "SVO": "Generic/Johnson.U"
+   },
+   "B": {
+    "SVO": "Generic/Johnson.B"
+   },
+   "V": {
+    "SVO": "Generic/Johnson.V"
+   },
+   "R": {
+    "SVO": "Generic/Johnson.R"
+   },
+   "I": {
+    "SVO": "Generic/Johnson.I"
+   },
+   "J": {
+    "SVO": "Generic/Johnson.J"
+   },
+   "M": {
+    "SVO": "Generic/Johnson.M"
+   }
+  }
+ },
+ {
+  "systems": [
+   "",
+   "AB"
+  ],
+  "telescopes": [
+   "",
+   "PAN-STARRS",
+   "Pan-STARRS",
+   "PAN-STARRS1",
+   "Pan-STARRS1",
+   "PS1"
+  ],
+  "instruments": [
+   "",
+   "PS1",
+   "Pan-STARRS1",
+   "GPC"
+  ],
+  "bandsets": [
+   "",
+   "PS1",
+   "GPC"
+  ],
+  "filters": {
+   "g": {
+    "SVO": "PAN-STARRS/PS1.g",
+    "offset": 0
+   },
+   "r": {
+    "SVO": "PAN-STARRS/PS1.r",
+    "offset": 0
+   },
+   "i": {
+    "SVO": "PAN-STARRS/PS1.i",
+    "offset": 0
+   },
+   "z": {
+    "SVO": "PAN-STARRS/PS1.z",
+    "offset": 0
+   },
+   "y": {
+    "SVO": "PAN-STARRS/PS1.y",
+    "offset": 0
+   },
+   "w": {
+    "SVO": "PAN-STARRS/PS1.w",
+    "offset": 0
+   },
+   "gp1": {
+    "SVO": "PAN-STARRS/PS1.g",
+    "offset": 0
+   },
+   "rp1": {
+    "SVO": "PAN-STARRS/PS1.r",
+    "offset": 0
+   },
+   "ip1": {
+    "SVO": "PAN-STARRS/PS1.i",
+    "offset": 0
+   },
+   "zp1": {
+    "SVO": "PAN-STARRS/PS1.z",
+    "offset": 0
+   },
+   "yp1": {
+    "SVO": "PAN-STARRS/PS1.y",
+    "offset": 0
+   },
+   "wp1": {
+    "SVO": "PAN-STARRS/PS1.w",
+    "offset": 0
+   },
+   "gP1": {
+    "SVO": "PAN-STARRS/PS1.g",
+    "offset": 0
+   },
+   "rP1": {
+    "SVO": "PAN-STARRS/PS1.r",
+    "offset": 0
+   },
+   "iP1": {
+    "SVO": "PAN-STARRS/PS1.i",
+    "offset": 0
+   },
+   "zP1": {
+    "SVO": "PAN-STARRS/PS1.z",
+    "offset": 0
+   },
+   "yP1": {
+    "SVO": "PAN-STARRS/PS1.y",
+    "offset": 0
+   },
+   "wP1": {
+    "SVO": "PAN-STARRS/PS1.w",
+    "offset": 0
+   },
+   "open": {
+    "SVO": "PAN-STARRS/PS1.open",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Rubin",
+   "LSST"
+  ],
+  "instruments": [
+   "",
+   "LSST"
+  ],
+  "bandsets": [
+   "",
+   "Rubin",
+   "LSST"
+  ],
+  "filters": {
+   "u": {
+    "SVO": "LSST/LSST.u",
+    "offset": 0
+   },
+   "g": {
+    "SVO": "LSST/LSST.g",
+    "offset": 0
+   },
+   "r": {
+    "SVO": "LSST/LSST.r",
+    "offset": 0
+   },
+   "i": {
+    "SVO": "LSST/LSST.i",
+    "offset": 0
+   },
+   "z": {
+    "SVO": "LSST/LSST.z",
+    "offset": 0
+   },
+   "y": {
+    "SVO": "LSST/LSST.y",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Chandra"
+  ],
+  "instruments": [
+   "ACIS-S"
+  ],
+  "filters": {
+   "": {
+    "path": "chandra_acis-s.area",
+    "xunit": "keV",
+    "yunit": "cm2"
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "XMM",
+   "XMM-Newton"
+  ],
+  "instruments": [
+   "PN"
+  ],
+  "filters": {
+   "": {
+    "path": "xmm_pn_medium.area",
+    "xunit": "keV",
+    "yunit": "cm2"
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Keck"
+  ],
+  "instruments": [
+   "",
+   "LRIS"
+  ],
+  "systems": [
+   "AB",
+   ""
+  ],
+  "filters": {
+   "Rs": {
+    "SVO": "Keck/LRIS.Rs"
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Palomar",
+   "ZTF"
+  ],
+  "instruments": [
+   "",
+   "ZTF",
+   "P48"
+  ],
+  "systems": [
+   "AB",
+   ""
+  ],
+  "filters": {
+   "g": {
+    "SVO": "Palomar/ZTF.g",
+    "offset": 0
+   },
+   "r": {
+    "SVO": "Palomar/ZTF.r",
+    "offset": 0
+   },
+   "i": {
+    "SVO": "Palomar/ZTF.i",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Swift"
+  ],
+  "instruments": [
+   "",
+   "Swift-XRT",
+   "XRT"
+  ],
+  "modes": [
+   "PC"
+  ],
+  "filters": {
+   "": {
+    "path": "swift_xrt_pc.area",
+    "xunit": "keV",
+    "yunit": "cm2"
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "ROSAT"
+  ],
+  "instruments": [
+   "PSPC"
+  ],
+  "filters": {
+   "": {
+    "path": "rosat_pspc_r4tor7.area",
+    "xunit": "keV",
+    "yunit": "cm2"
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "ATLAS1",
+   "ATLAS"
+  ],
+  "systems": [
+   "AB",
+   ""
+  ],
+  "instruments": [
+   "",
+   "ACAM1"
+  ],
+  "filters": {
+   "orange": {
+    "SVO": "Misc/Atlas.orange",
+    "offset": 0
+   },
+   "o": {
+    "SVO": "Misc/Atlas.orange",
+    "offset": 0
+   },
+   "cyan": {
+    "SVO": "Misc/Atlas.cyan",
+    "offset": 0
+   },
+   "c": {
+    "SVO": "Misc/Atlas.cyan",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "TESS"
+  ],
+  "systems": [
+   "AB",
+   ""
+  ],
+  "instruments": [
+   "",
+   "TESS"
+  ],
+  "filters": {
+   "Red": {
+    "SVO": "TESS/TESS.Red",
+    "offset": 0
+   },
+   "TESS": {
+    "SVO": "TESS/TESS.TESS",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "systems": [
+   "",
+   "Vega"
+  ],
+  "telescopes": [
+   "",
+   "CRTS"
+  ],
+  "instruments": [
+   "",
+   "CRTS"
+  ],
+  "filters": {
+   "C": {
+    "SVO": "Misc/CRTS.C",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "systems": [
+   "",
+   "AB"
+  ],
+  "telescopes": [
+   "",
+   "WISE"
+  ],
+  "instruments": [
+   "",
+   "WISE"
+  ],
+  "filters": {
+   "W1": {
+    "SVO": "WISE/WISE.W1",
+    "offset": 0
+   },
+   "W2": {
+    "SVO": "WISE/WISE.W2",
+    "offset": 0
+   },
+   "W3": {
+    "SVO": "WISE/WISE.W3",
+    "offset": 0
+   },
+   "W4": {
+    "SVO": "WISE/WISE.W4",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "GOTO"
+  ],
+  "systems": [
+   "AB",
+   ""
+  ],
+  "instruments": [
+   "",
+   "GOTO"
+  ],
+  "bandsets": [
+   "",
+   "GOTO"
+  ],
+  "filters": {
+   "L": {
+    "SVO": "GOTO/GOTO.L",
+    "offset": 0
+   },
+   "B": {
+    "SVO": "GOTO/GOTO.B",
+    "offset": 0
+   },
+   "G": {
+    "SVO": "GOTO/GOTO.G",
+    "offset": 0
+   },
+   "R": {
+    "SVO": "GOTO/GOTO.R",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "JWST"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "instruments": [
+   "",
+   "MIRI",
+   "NIRCam"
+  ],
+  "bandsets": [
+   "",
+   "JWST"
+  ],
+  "filters": {
+   "F070W": {
+    "SVO": "JWST/NIRCam.F070W",
+    "offset": 0
+   },
+   "F090W": {
+    "SVO": "JWST/NIRCam.F090W",
+    "offset": 0
+   },
+   "F115W": {
+    "SVO": "JWST/NIRCam.F115W",
+    "offset": 0
+   },
+   "F150W": {
+    "SVO": "JWST/NIRCam.F150W",
+    "offset": 0
+   },
+   "F150W2": {
+    "SVO": "JWST/NIRCam.F150W2",
+    "offset": 0
+   },
+   "F200W": {
+    "SVO": "JWST/NIRCam.F200W",
+    "offset": 0
+   },
+   "F277W": {
+    "SVO": "JWST/NIRCam.F277W",
+    "offset": 0
+   },
+   "F322W2": {
+    "SVO": "JWST/NIRCam.F322W2",
+    "offset": 0
+   },
+   "F356W": {
+    "SVO": "JWST/NIRCam.F356W",
+    "offset": 0
+   },
+   "F444W": {
+    "SVO": "JWST/NIRCam.F444W",
+    "offset": 0
+   },
+   "F560W": {
+    "SVO": "JWST/MIRI.F560W",
+    "offset": 0
+   },
+   "F770W": {
+    "SVO": "JWST/MIRI.F770W",
+    "offset": 0
+   },
+   "F1000W": {
+    "SVO": "JWST/MIRI.F1000W",
+    "offset": 0
+   },
+   "F1130W": {
+    "SVO": "JWST/MIRI.F1130W",
+    "offset": 0
+   },
+   "F1280W": {
+    "SVO": "JWST/MIRI.F1280W",
+    "offset": 0
+   },
+   "F1500W": {
+    "SVO": "JWST/MIRI.F1500W",
+    "offset": 0
+   },
+   "F1800W": {
+    "SVO": "JWST/MIRI.F1800W",
+    "offset": 0
+   },
+   "F2100W": {
+    "SVO": "JWST/MIRI.F2100W",
+    "offset": 0
+   },
+   "F2550W": {
+    "SVO": "JWST/MIRI.F2550W",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Roman",
+   "WFIRST"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "instruments": [
+   "",
+   "WFI",
+   "WFIRST"
+  ],
+  "bandsets": [
+   "",
+   "Roman",
+   "WFIRST"
+  ],
+  "filters": {
+   "F062": {
+    "SVO": "Roman/WFI.F062",
+    "offset": 0
+   },
+   "F087": {
+    "SVO": "Roman/WFI.F087",
+    "offset": 0
+   },
+   "F106": {
+    "SVO": "Roman/WFI.F106",
+    "offset": 0
+   },
+   "F129": {
+    "SVO": "Roman/WFI.F129",
+    "offset": 0
+   },
+   "F146": {
+    "SVO": "Roman/WFI.F146",
+    "offset": 0
+   },
+   "F158": {
+    "SVO": "Roman/WFI.F158",
+    "offset": 0
+   },
+   "F184": {
+    "SVO": "WFIRST/WFI.F184",
+    "offset": 0
+   },
+   "F213": {
+    "SVO": "Roman/WFI.F213",
+    "offset": 0
+   },
+   "R062": {
+    "SVO": "WFIRST/WFI.R062",
+    "offset": 0
+   },
+   "Z087": {
+    "SVO": "WFIRST/WFI.Z087",
+    "offset": 0
+   },
+   "Y106": {
+    "SVO": "WFIRST/WFI.Y106",
+    "offset": 0
+   },
+   "J129": {
+    "SVO": "WFIRST/WFI.J129",
+    "offset": 0
+   },
+   "W146": {
+    "SVO": "WFIRST/WFI.W146",
+    "offset": 0
+   },
+   "H158": {
+    "SVO": "WFIRST/WFI.H158",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "Euclid"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "instruments": [
+   "",
+   "VIS",
+   "NISP"
+  ],
+  "bandsets": [
+   "",
+   "Euclid"
+  ],
+  "filters": {
+   "VIS": {
+    "SVO": "Euclid/VIS.vis",
+    "offset": 0
+   },
+   "YE": {
+    "SVO": "Euclid/NISP.Y",
+    "offset": 0
+   },
+   "JE": {
+    "SVO": "Euclid/NISP.J",
+    "offset": 0
+   },
+   "HE": {
+    "SVO": "Euclid/NISP.H",
+    "offset": 0
+   }
+  }
+ },
+ {
+  "telescopes": [
+   "",
+   "SPHEREx"
+  ],
+  "systems": [
+   "",
+   "AB"
+  ],
+  "instruments": [
+   "",
+   "SPHEREx"
+  ],
+  "bandsets": [
+   "",
+   "SPHEREx"
+  ],
+  "filters": {
+   "S1": {
+    "min_wavelength": 7500,
+    "max_wavelength": 11100,
+    "delta_wavelength": 50
+   },
+   "S2": {
+    "min_wavelength": 11100,
+    "max_wavelength": 16400,
+    "delta_wavelength": 50
+   },
+   "S3": {
+    "min_wavelength": 16400,
+    "max_wavelength": 24200,
+    "delta_wavelength": 50
+   },
+   "S4": {
+    "min_wavelength": 24200,
+    "max_wavelength": 38200,
+    "delta_wavelength": 100
+   },
+   "S5": {
+    "min_wavelength": 38200,
+    "max_wavelength": 44200,
+    "delta_wavelength": 100
+   },
+   "S6": {
+    "min_wavelength": 44200,
+    "max_wavelength": 50000,
+    "delta_wavelength": 100
+   }
+  }
+ }
+]

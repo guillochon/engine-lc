@@ -1,0 +1,9 @@
+numpy
+scipy
+matplotlib
+astropy
+extinction
+sympy
+requests
+# MOSFiT 2.0 from the uv-package-management branch of
+# https://github.com/guillochon/MOSFiT (see README)
