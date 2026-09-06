@@ -495,7 +495,6 @@ def main(tag='fiducial'):
         ax[0].plot(tg, Lir, color='tab:gray', ls='-' if rpc < 1 else '--', lw=0.9, label=lab)
     ax[0].set_yscale('log'); ax[0].set_ylim(1e40, 3e45); ax[0].set_xlim(-0.5, 2.2 * tau0 + 2)
     ax[0].set_xlabel('years after disruption'); ax[0].set_ylabel(r'$L$ (erg s$^{-1}$)'); ax[0].legend(fontsize=4.8, loc='upper right', frameon=False, handlelength=1.8)
-    ax[0].set_title(r'$M_{\rm h}=10^{%.1f}$, $M_\ast=%.1f$, $b=%.2f$; black: ring, red: cloud-smoothed' % (np.log10(e['mh'][j]), e['mstar'][j], e['b'][j]), fontsize=7)
     def echo_hist(a, y, bins):
         """Histograms of an echo property for the two limits (all sightlines solid,
         the unobscured face-on subset cos i > 0.9 dashed)."""
