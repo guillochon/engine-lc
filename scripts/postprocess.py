@@ -133,6 +133,25 @@ def gband_thalf(mags_g, t_obs, z):
     return out
 
 
+def drawn_xlim(series, spans=()):
+    """Outermost extent that is actually drawn in a panel, so the axis can end on a hard cutoff.
+
+    `series` is a list of (values, weights, bins) triples, one per histogram: each contributes the
+    edges of the outermost bins that receive weight, which is where its drawn step function starts
+    and stops. `spans` adds the (min, max) of any analytic curve plotted in the same panel. A
+    distribution that runs off the end of its bins keeps that bin edge, so panels without a hard
+    cutoff keep the range the bins define."""
+    lo, hi = np.inf, -np.inf
+    for vals, w, bins in series:
+        h, _ = np.histogram(np.asarray(vals), bins=bins, weights=np.asarray(w))
+        nz = np.nonzero(h)[0]
+        if len(nz):
+            lo = min(lo, bins[nz[0]]); hi = max(hi, bins[nz[-1] + 1])
+    for a, b in spans:
+        lo = min(lo, a); hi = max(hi, b)
+    return (lo, hi) if lo < hi else None
+
+
 def echo(L_rest, t_rest, mh, cosi, fomega=ps.F_OMEGA, r_in_pc=None, smooth=True, t_max_yr=None):
     """Infrared echo light curve (erg/s) from the inner face of the disk.
     Returns (t_yr, L_IR, T_barvainis, T_gray)."""
@@ -454,11 +473,15 @@ def main(tag='fiducial'):
         a.hist(xf, bins=bins, weights=wf_abs / bw, histtype='step', color='gray', lw=1.5, label='field (theoretical rate)')
         a.hist(xe, bins=bins, weights=we_abs / bw, histtype='step', color='tab:orange', lw=1.5, label=r'engine ($\dot n_{\rm eng}=10^{-7}$)')
         a.hist(xe[e['partial']], bins=bins, weights=we_abs[e['partial']] / bw, histtype='stepfilled', color='tab:orange', alpha=0.25, label='engine, partial')
+        drawn = [(xf, wf_abs, bins), (xe, we_abs, bins)]
         if k in observed:
             ob = bins[::3]   # coarser bins for 33 events
             a.hist(observed[k], bins=ob, weights=y_rate / (3 * bw), histtype='step', color='tab:blue', lw=1.2, ls='--', label=r'observed (ZTF, $\sum 1/V_{\rm max}$)')
+            drawn.append((observed[k], y_rate, ob))
         a.set_xlabel(lab); a.set_yscale('log'); a.set_ylim(3e-10, 3e-5)
         if k == 0: a.set_ylim(3e-10, 3e-4)      # headroom for the legend
+        lim = drawn_xlim(drawn)                 # end the axis on the distributions' own cutoffs
+        if lim: a.set_xlim(*lim)
         if k == 1: a.invert_xaxis()             # brighter (more negative) magnitudes to the right
     for a in ax[:, 0]:
         a.set_ylabel(r'd$\dot n$/d$x$ (Mpc$^{-3}$ yr$^{-1}$ dex$^{-1}$ or mag$^{-1}$)')
@@ -468,14 +491,17 @@ def main(tag='fiducial'):
     # --- Fig: luminosity functions (g and W1) with and without the screen
     fig, ax = plt.subplots(1, 2, figsize=(7.2, 2.9))
     bins = np.linspace(-23, -13, 26)
+    drawn = {0: [], 1: []}
     for d, w, c, lab in [(f, wf * meta['ndot_field'], 'gray', 'field'), (e, we * meta['ndot_eng'] * R['fspark_lam_needed'], 'tab:orange', r'engine ($\dot n_{\rm eng}=10^{-7}$)')]:
         dm = 5 * np.log10(cosmo.luminosity_distance(d['z']).value * 1e5) - 2.5 * np.log10(1 + d['z'])
-        for band, a, avs in [('g', ax[0], [0, 50]), ('W1', ax[1], [0, 50, 400])]:
+        for band, j, avs in [('g', 0, [0, 50]), ('W1', 1, [0, 50, 400])]:
+            a = ax[j]
             for av, ls in zip(avs, ['-', '--', ':']):
                 m = screened_peakmag(d, av, band=band) - dm
                 if 'cosi' not in d and av > 0: continue
                 a.hist(m, bins=bins, weights=w / (bins[1] - bins[0]), histtype='step', color=c, ls=ls, lw=1.5,
                        label=lab + (r', $A_V=%d$ in disk' % av if av else ''))
+                drawn[j].append((m, w, bins))
     # observed rest-frame g-band luminosity functions, converted to per-magnitude rate densities
     Mg = np.linspace(-23, -13, 300)
     Lnu = 4 * np.pi * (10 * PC) ** 2 * 10 ** (-(Mg + 48.6) / 2.5)          # erg/s/Hz
@@ -494,8 +520,13 @@ def main(tag='fiducial'):
     gbins = np.arange(-22.5, -16.0, 1.0)
     ax[0].hist(gMg, bins=gbins, weights=gw / (gbins[1] - gbins[0]), histtype='step', color='tab:green', lw=1.4, ls=':',
                label=r'observed: green-valley hosts (Yao+23, $\sum p_{\rm green}/V_{\rm max}$)')
-    for a, lab in zip(ax, [r'peak $M_g$', r'peak $M_{W1}$']):
-        a.set_yscale('log'); a.set_xlabel(lab); a.set_ylabel(r'd$\dot n$/d$M$ (Mpc$^{-3}$ yr$^{-1}$ mag$^{-1}$)'); a.set_ylim(1e-10, 1e-4); a.invert_xaxis()
+    drawn[0].append((gMg, gw, gbins))
+    spans = {0: [(Mg[m_yao].min(), Mg[m_yao].max()), (Mg[m_vv].min(), Mg[m_vv].max())], 1: []}
+    for j, (a, lab) in enumerate(zip(ax, [r'peak $M_g$', r'peak $M_{W1}$'])):
+        a.set_yscale('log'); a.set_xlabel(lab); a.set_ylabel(r'd$\dot n$/d$M$ (Mpc$^{-3}$ yr$^{-1}$ mag$^{-1}$)'); a.set_ylim(1e-10, 1e-4)
+        lim = drawn_xlim(drawn[j], spans[j])    # end the axis on the luminosity functions' own cutoffs
+        if lim: a.set_xlim(*lim)
+        a.invert_xaxis()
     # legends sit in the empty top two decades, clear of every curve
     ax[0].legend(fontsize=5.5, loc='upper left', ncol=1, frameon=False); ax[1].legend(fontsize=5.5, loc='upper left', frameon=False)
     fig.tight_layout(); fig.savefig(os.path.join(FIG, 'lf.pdf')); plt.close(fig)
