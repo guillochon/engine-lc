@@ -1,8 +1,8 @@
 """Generate light curves for a population catalog with the MOSFiT ``tde_shock`` model:
 prompt collision-powered emission at pericenter (radiated fraction f_rad of the stream's
 kinetic energy, so that epsilon_shock = f_rad r_g / r_p; Jiang, Guillochon & Loeb 2016)
-plus accretion at epsilon_acc delayed by the viscous time of the Guillochon &
-Ramirez-Ruiz (2015) dark-year map, with the Eddington cap applied to the sum.
+plus accretion at epsilon_acc (log-normal about 0.03), Eddington-capped and then delayed by the viscous time of the Guillochon &
+Ramirez-Ruiz (2015) dark-year map; the collision term is capped separately, so L <= 2 L_Edd.
 
 Usage:  python run_lcs.py catalog_fiducial.npz [max_events]
 
@@ -37,7 +37,8 @@ T_REST_GRID = np.logspace(-1, np.log10(40000.0), 200)   # rest-frame days for bo
 
 MODEL = 'tde_shock'
 FRAD_RANGE = (0.02, 0.07)   # radiated fraction of the collision kinetic energy (Jiang et al. 2016: 2-7%)
-EFF_ACC = 0.1               # accretion efficiency of the delayed component
+EFF_ACC = 0.03              # median accretion efficiency of the delayed component (fitted-sample value)
+EFF_ACC_SCATTER = 0.3       # dex, log-normal event-to-event scatter, clipped to the tde_shock prior [0.01, 0.1]
 TVISC_SCATTER = 0.5         # dex, event-to-event scatter about the dark-year map
 PROMPT_OFFSET = -6.0        # dex offset that removes the viscous delay (prompt-circularization variant)
 
@@ -73,13 +74,14 @@ def run_population(m, pop, nmax=None, darkyear=True, seed=0):
     # dex offset of the viscous time about the dark-year map (or none, for prompt circularization)
     frad_all = 10 ** rng.uniform(np.log10(FRAD_RANGE[0]), np.log10(FRAD_RANGE[1]), n)
     off_all = TVISC_SCATTER * rng.standard_normal(n) if darkyear else np.full(n, PROMPT_OFFSET)
+    eff_all = np.clip(EFF_ACC * 10 ** (EFF_ACC_SCATTER * rng.standard_normal(n)), 0.01, 0.1)
     t0 = time.time()
     for i in range(n):
         z = float(pop['z'][i])
         m._modules['redshift'].fix_value(z)
         m._modules['lumdist'].fix_value(float(cosmo.luminosity_distance(z).value))
         m._modules['tviscoffset'].fix_value(float(off_all[i]))
-        nuis = dict(frad=float(frad_all[i]), efficiency=EFF_ACC, Rph0=float(pop['rph0'][i]),
+        nuis = dict(frad=float(frad_all[i]), efficiency=float(eff_all[i]), Rph0=float(pop['rph0'][i]),
                     lphoto=float(pop['lph'][i]), nhhost=float(pop['nh'][i]))
         o = None
         for attempt in range(MAX_REDRAW + 1):
@@ -154,6 +156,6 @@ if __name__ == '__main__':
         for k, v in res.items():
             out[pop + '_' + k] = v
     out['bands'] = np.array(BANDS); out['t_obs'] = T_OBS; out['t_rest'] = T_REST_GRID
-    out['model'] = MODEL; out['frad_range'] = np.array(FRAD_RANGE); out['eff_acc'] = EFF_ACC
+    out['model'] = MODEL; out['frad_range'] = np.array(FRAD_RANGE); out['eff_acc'] = EFF_ACC; out['eff_acc_scatter'] = EFF_ACC_SCATTER
     np.savez_compressed(os.path.join(ROOT, 'products', 'lcs_%s.npz' % tag), **out)
     print('done')

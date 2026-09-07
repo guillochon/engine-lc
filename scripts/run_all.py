@@ -30,7 +30,7 @@ def run(args, out):
     return r.returncode
 
 
-STAGGER = 45.0   # s between job starts: MOSFiT rewrites its filter cache on load, and concurrent loads race
+STAGGER = 0.0    # s between job starts (MOSFiT now guards its filter cache, so concurrent loads are safe)
 
 
 def stage(name, tags, args_for, workers, stagger=0.0):

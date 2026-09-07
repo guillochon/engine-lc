@@ -14,7 +14,7 @@ is produced by the commands below.
 | `products/popsynth_summary.json`, `products/engine_window_f022.json` | Population-synthesis summary and the engine equilibrium at the window midpoint (Table 1) |
 | `scripts/engine_window_exponents.py` | Table 1 from the `tde-engine` equilibrium solver |
 | `scripts/popsynth.py` | Population synthesis: engine and field Monte Carlo catalogs |
-| `scripts/run_lcs.py` | MOSFiT `tde_shock` light curves for a catalog (f_rad log-uniform 0.02-0.07, epsilon_acc = 0.1, dark-year viscous times with 0.5 dex scatter, photosphere kept inside the MOSFiT wind envelope) |
+| `scripts/run_lcs.py` | MOSFiT `tde_shock` light curves for a catalog (f_rad log-uniform 0.02-0.07; epsilon_acc log-normal about 0.03, Eddington-capped before the dark-year viscous delay with 0.5 dex scatter, the collision term capped separately; photosphere kept inside the MOSFiT wind envelope) |
 | `scripts/postprocess.py` | Disk screen, infrared echoes, luminosity functions, survey yields, figures, table rows |
 | `scripts/variant_table.py` | Collects the variant results into `tables/variant_rows.tex` |
 | `scripts/run_all.py` | Runs steps 3-4 below for every catalog, several catalogs at a time (`--workers N`) |
