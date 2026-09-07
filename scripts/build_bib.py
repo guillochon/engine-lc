@@ -80,6 +80,10 @@ keys.update({
     'Meza:2025a': '2025ApJ...993...57M',           # RMHD accretion-flow formation, collision-powered outflows and L~5e44
     'Guo:2025a': '2025ApJ...979..235G',            # reverberation evidence for stream collision + delayed disk
     'Martire:2026a': '2026MNRAS.549g1021M',        # end-to-end IMBH TDE: wind-mediated near-Eddington emission, few e4 K
+    # super-Eddington accretion: photon trapping, outflows, radiative efficiency
+    'Begelman:1979a': '1979MNRAS.187..237B',      # photon trapping in super-critical accretion
+    'Jiang:2014a': '2014ApJ...796..106J',         # RMHD super-Eddington disk, radiative efficiency
+    'Sadowski:2016a': '2016MNRAS.456.3929S',      # super-Eddington disks: radiative efficiency vs mdot, outflow power
     # software acknowledgments
     'Astropy:2013a': '2013A&A...558A..33A',
     'Astropy:2018a': '2018AJ....156..123A',

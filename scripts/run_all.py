@@ -13,7 +13,15 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TAGS = ['fiducial', 'prompt', 'gaslimited', 'burstrelation', 'simple', 'young1', 'young0', 'KH13', 'miller']
+TAGS = ['fiducial', 'prompt', 'gaslimited', 'burstrelation', 'simple', 'young1', 'young0', 'KH13', 'miller',
+        'fiducial_p1.5', 'fiducial_p2']   # '<catalog>_p<value>' reruns a catalog with accretion exponent p
+
+
+def lcs_args(t):
+    if '_p' in t:
+        base, p = t.split('_p')
+        return ['scripts/run_lcs.py', 'catalog_%s.npz' % base, '--eddslope', p, '--tag', t]
+    return ['scripts/run_lcs.py', 'catalog_%s.npz' % t]
 LOG = os.path.join(ROOT, 'products', 'run_all.log')
 
 
@@ -57,7 +65,7 @@ if __name__ == '__main__':
     tags = [a for a in argv if a not in skip] or TAGS
     log('start %s (workers=%d)' % (' '.join(tags), workers))
     if not skip_lcs:
-        stage('run_lcs', tags, lambda t: ['scripts/run_lcs.py', 'catalog_%s.npz' % t], workers, stagger=STAGGER)
+        stage('run_lcs', tags, lcs_args, workers, stagger=STAGGER)
     stage('postprocess', tags, lambda t: ['scripts/postprocess.py', t], workers)
     log('variant_table')
     rc = run(['scripts/variant_table.py'], LOG)

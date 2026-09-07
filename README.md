@@ -17,7 +17,7 @@ is produced by the commands below.
 | `scripts/run_lcs.py` | MOSFiT `tde_shock` light curves for a catalog (f_rad log-uniform 0.02-0.07; epsilon_acc log-normal about 0.03, Eddington-capped before the dark-year viscous delay with 0.5 dex scatter, the collision term capped separately; photosphere kept inside the MOSFiT wind envelope) |
 | `scripts/postprocess.py` | Disk screen, infrared echoes, luminosity functions, survey yields, figures, table rows |
 | `scripts/variant_table.py` | Collects the variant results into `tables/variant_rows.tex` |
-| `scripts/run_all.py` | Runs steps 3-4 below for every catalog, several catalogs at a time (`--workers N`) |
+| `scripts/run_all.py` | Runs steps 3-4 below for every catalog, several catalogs at a time (`--workers N`); a tag `<catalog>_p<value>` reruns a catalog with the super-Eddington exponent p (`run_lcs.py --eddslope`) |
 | `scripts/parse_yao2023.py` | Per-event ZTF sample of Yao et al. (2023) with host colours and green-valley probabilities, used in Figures 2 and 3 |
 | `scripts/build_bib.py`, `scripts/ads_validate.py` | Bibliography from ADS bibcodes (`scripts/bibcodes.json`) |
 | `scripts/check_abstract.py` | arXiv abstract length / macro check |

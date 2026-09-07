@@ -14,6 +14,8 @@ VARIANTS = [
     ('young0', 'Old population only'),
     ('KH13', '\\citet{Kormendy:2013a} relation'),
     ('miller', '\\citet{Miller:2015a} occupation fraction'),
+    ('fiducial_p1.5', 'Super-Eddington exponent $p_{\\rm Edd} = 1.5$'),
+    ('fiducial_p2', 'Super-Eddington exponent $p_{\\rm Edd} = 2$'),
 ]
 
 

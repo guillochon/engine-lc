@@ -4,7 +4,10 @@ kinetic energy, so that epsilon_shock = f_rad r_g / r_p; Jiang, Guillochon & Loe
 plus accretion at epsilon_acc (log-normal about 0.03), Eddington-capped and then delayed by the viscous time of the Guillochon &
 Ramirez-Ruiz (2015) dark-year map; the collision term is capped separately, so L <= 2 L_Edd.
 
-Usage:  python run_lcs.py catalog_fiducial.npz [max_events]
+Usage:  python run_lcs.py catalog_fiducial.npz [max_events] [--eddslope P] [--tag NAME]
+
+--eddslope sets the super-Eddington exponent p of the accretion term (L = L_Edd m/(1+m)^p; p = 1 is the
+harmonic cap), and --tag names the output library (default: the catalog tag).
 
 Must be run from the paper root so that MOSFiT picks up the local
 modules/observables/filterrules.json (Euclid and SPHEREx bands).
@@ -41,6 +44,7 @@ EFF_ACC = 0.03              # median accretion efficiency of the delayed compone
 EFF_ACC_SCATTER = 0.3       # dex, log-normal event-to-event scatter, clipped to the tde_shock prior [0.01, 0.1]
 TVISC_SCATTER = 0.5         # dex, event-to-event scatter about the dark-year map
 PROMPT_OFFSET = -6.0        # dex offset that removes the viscous delay (prompt-circularization variant)
+EDDSLOPE = 1.0              # default super-Eddington exponent of the accretion term (harmonic cap)
 
 
 def make_model():
@@ -59,7 +63,8 @@ G_CGS, C_CGS, MSUN_CGS = 6.674e-8, 2.99792458e10, 1.989e33
 MAX_REDRAW = 12
 
 
-def run_population(m, pop, nmax=None, darkyear=True, seed=0):
+def run_population(m, pop, nmax=None, darkyear=True, seed=0, eddslope=EDDSLOPE):
+    m._modules['eddslope'].fix_value(float(eddslope))
     rng = np.random.default_rng(seed)
     names = m.free_parameter_names()
     n = len(pop['mh']) if nmax is None else min(nmax, len(pop['mh']))
@@ -140,10 +145,19 @@ def run_population(m, pop, nmax=None, darkyear=True, seed=0):
 
 
 if __name__ == '__main__':
-    catpath = sys.argv[1]
-    nmax = int(sys.argv[2]) if len(sys.argv) > 2 else None
+    argv = sys.argv[1:]
+    eddslope = float(argv[argv.index('--eddslope') + 1]) if '--eddslope' in argv else EDDSLOPE
+    out_tag = argv[argv.index('--tag') + 1] if '--tag' in argv else None
+    skip = set()
+    for flag in ('--eddslope', '--tag'):
+        if flag in argv:
+            skip |= {flag, argv[argv.index(flag) + 1]}
+    pos = [a for a in argv if a not in skip]
+    catpath = pos[0]
+    nmax = int(pos[1]) if len(pos) > 1 else None
     cat = np.load(os.path.join(ROOT, 'products', catpath), allow_pickle=True)
     tag = str(cat['tag'])
+    out_tag = out_tag or tag
     darkyear = bool(cat['darkyear']) if 'darkyear' in cat.files else True
     if 'scale_eff' in cat.files and bool(cat['scale_eff']):
         raise SystemExit('the efficiency-scaling variant is superseded by the tde_shock model (epsilon = f_rad r_g / r_p)')
@@ -152,10 +166,10 @@ if __name__ == '__main__':
     for pop in ['eng', 'field']:
         d = {k[len(pop) + 1:]: cat[k] for k in cat.files if k.startswith(pop + '_')}
         print('population', pop, len(d['mh']))
-        res = run_population(m, d, nmax, darkyear, seed=zlib.crc32((tag + pop).encode()))
+        res = run_population(m, d, nmax, darkyear, seed=zlib.crc32((tag + pop).encode()), eddslope=eddslope)
         for k, v in res.items():
             out[pop + '_' + k] = v
     out['bands'] = np.array(BANDS); out['t_obs'] = T_OBS; out['t_rest'] = T_REST_GRID
-    out['model'] = MODEL; out['frad_range'] = np.array(FRAD_RANGE); out['eff_acc'] = EFF_ACC; out['eff_acc_scatter'] = EFF_ACC_SCATTER
-    np.savez_compressed(os.path.join(ROOT, 'products', 'lcs_%s.npz' % tag), **out)
+    out['model'] = MODEL; out['frad_range'] = np.array(FRAD_RANGE); out['eff_acc'] = EFF_ACC; out['eff_acc_scatter'] = EFF_ACC_SCATTER; out['eddslope'] = eddslope
+    np.savez_compressed(os.path.join(ROOT, 'products', 'lcs_%s.npz' % out_tag), **out)
     print('done')
