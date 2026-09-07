@@ -18,7 +18,7 @@ is produced by the commands below.
 | `scripts/postprocess.py` | Disk screen, infrared echoes, luminosity functions, survey yields, figures, table rows |
 | `scripts/variant_table.py` | Collects the variant results into `tables/variant_rows.tex` |
 | `scripts/run_all.py` | Runs steps 3-4 below for every catalog, several catalogs at a time (`--workers N`) |
-| `scripts/parse_yao2023.py` | Per-event ZTF sample of Yao et al. (2023) used in Figure 2 |
+| `scripts/parse_yao2023.py` | Per-event ZTF sample of Yao et al. (2023) with host colours and green-valley probabilities, used in Figures 2 and 3 |
 | `scripts/build_bib.py`, `scripts/ads_validate.py` | Bibliography from ADS bibcodes (`scripts/bibcodes.json`) |
 | `scripts/check_abstract.py` | arXiv abstract length / macro check |
 | `scripts/nicholl2022_posteriors.json` | MOSFiT posteriors of Nicholl et al. (2022) from which nuisance parameters are drawn |

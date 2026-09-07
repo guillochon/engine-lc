@@ -39,15 +39,31 @@ for name in ev:
     pm = re.findall(r'(-?\d+\.\d+)\\pm\s*\d+\.\d+', chunk)
     if pm:
         ev[name]['logMBH'] = float(pm[0])
-    asym = re.findall(r'(-?\d+\.\d+)_\{-\d+\.\d+\}\^\{\+\d+\.\d+\}', chunk)
+    asym = re.findall(r'(-?\d+\.\d+)_\{-(\d+\.\d+)\}\^\{\+(\d+\.\d+)\}', chunk)
     if asym:
-        ev[name]['logMgal'] = float(asym[0])
+        ev[name]['logMgal'] = float(asym[0][0])
+        ev[name]['logMgal_err'] = 0.5 * (float(asym[0][1]) + float(asym[0][2]))
+    if len(asym) > 1:   # second SED column is the rest-frame, extinction-corrected (0,0)u-r colour
+        ev[name]['umr'] = float(asym[1][0])
+        ev[name]['umr_err'] = 0.5 * (float(asym[1][1]) + float(asym[1][2]))
     # r_1/2 and z_max,h are the two plain numbers before the next row's ID
     mz = re.search(r'(\d+\.\d+)\s+(0\.\d+)\s+(?:\d{1,2}\s+AT20|$)', chunk)
     if mz is None:
         mz = re.search(r'(\d+\.\d+)\s+(0\.\d+)\s*$', chunk[:chunk.find('Table') if 'Table' in chunk else len(chunk)].rstrip())
     ev[name]['zmax_h'] = float(mz.group(2)) if mz else None
+# Yao et al. (2023) Eqs. 22-23: the mass-corrected colour C = (0,0)u-r - 0.5 - 0.15 log Mgal, with red C > 0.1,
+# green |C| <= 0.1, blue C < -0.1; membership probabilities from a Gaussian in C (their Section VI.5)
+from scipy.stats import norm
+for n in ev:
+    e = ev[n]
+    if 'umr' in e and 'logMgal' in e:
+        C = e['umr'] - 0.5 - 0.15 * e['logMgal']
+        sC = float(np.hypot(e.get('umr_err', 0.15), 0.15 * e.get('logMgal_err', 0.15)))
+        e['C_color'] = C
+        e['p_red'] = float(norm.sf((0.1 - C) / sC)); e['p_blue'] = float(norm.cdf((-0.1 - C) / sC))
+        e['p_green'] = max(0.0, 1.0 - e['p_red'] - e['p_blue'])
 ok = [n for n in ev if 'logMBH' in ev[n]]
+print('with colour:', sum('p_green' in ev[n] for n in ev), 'expected green:', round(sum(ev[n].get('p_green', 0) for n in ev), 1))
 print('with M_BH:', len(ok))
 for n in ev:
     e = ev[n]

@@ -484,6 +484,15 @@ def main(tag='fiducial'):
     m_yao = (Lg > 10 ** 42.5) & (Lg < 10 ** 45.0); m_vv = (Lg > 10 ** 42.3) & (Lg < 10 ** 44.8)
     ax[0].plot(Mg[m_yao], yao[m_yao], color='tab:blue', lw=1.8, label='observed: Yao et al. (2023)')
     ax[0].plot(Mg[m_vv], vv[m_vv], color='tab:blue', lw=1.2, ls='--', label='observed: van Velzen (2018)')
+    # the green-valley (post-starburst proxy) subset of the Yao et al. (2023) sample: each event weighted by
+    # its green-valley membership probability (their Eqs. 22-23) times its 1/V_max rate density, per magnitude
+    yao_ev = json.load(open(os.path.join(HERE, 'yao2023_sample.json')))
+    gv = [v for v in yao_ev.values() if 'p_green' in v]
+    gMg = -2.5 * np.log10(10 ** np.array([v['logLg'] for v in gv]) / (C / 4741e-8) / (4 * np.pi * (10 * PC) ** 2)) - 48.6
+    gw = np.array([v['w_1overV'] * v['p_green'] for v in gv])
+    gbins = np.arange(-22.5, -16.0, 1.0)
+    ax[0].hist(gMg, bins=gbins, weights=gw / (gbins[1] - gbins[0]), histtype='step', color='tab:green', lw=1.4, ls=':',
+               label=r'observed: green-valley hosts (Yao+23, $\sum p_{\rm green}/V_{\rm max}$)')
     for a, lab in zip(ax, [r'peak $M_g$', r'peak $M_{W1}$']):
         a.set_yscale('log'); a.set_xlabel(lab); a.set_ylabel(r'd$\dot n$/d$M$ (Mpc$^{-3}$ yr$^{-1}$ mag$^{-1}$)'); a.set_ylim(1e-10, 1e-4); a.invert_xaxis()
     # legends sit in the empty top two decades, clear of every curve
