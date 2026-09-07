@@ -73,6 +73,9 @@ if __name__ == '__main__':
     log('start %s (workers=%d)' % (' '.join(tags), workers))
     if not skip_lcs:
         stage('run_lcs', tags, lcs_args, workers, stagger=STAGGER)
+    # the constant-temperature blackbody fits Figure 2's temperature panel compares with the
+    # observed sample; cheap, but it loads MOSFiT's filters, so it runs before postprocess
+    stage('fit_bbtemp', tags, lambda t: ['scripts/fit_bbtemp.py', t], workers)
     stage('postprocess', tags, lambda t: ['scripts/postprocess.py', t], workers)
     log('variant_table')
     rc = run(['scripts/variant_table.py'], LOG)

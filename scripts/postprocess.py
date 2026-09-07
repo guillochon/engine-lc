@@ -89,6 +89,14 @@ def load(tag):
         pops[p] = d
     meta = {k: cat[k].item() if cat[k].shape == () else cat[k] for k in
             ['ndot_eng', 'ndot_field', 'active_frac', 'mean_rate_per_psb', 'V_eff', 'lifetime', 'lam']}
+    # constant-temperature blackbody fits to the synthetic photometry (scripts/fit_bbtemp.py),
+    # the quantity Yao et al. (2023) measure; absent until that script has been run for this tag
+    fp = os.path.join(ROOT, 'products', 'bbfit_%s.npz' % tag)
+    if os.path.exists(fp):
+        bb = np.load(fp)
+        for p in pops:
+            for src, dst in [('fwhm', 'tbb_fit'), ('wide', 'tbb_fit_wide'), ('single', 'tbb_fit_peak')]:
+                pops[p][dst] = bb['%s_%s' % (p, src)][:len(pops[p]['lpeak'])]
     bands = list(lcs['bands']); t_obs = lcs['t_obs']; t_rest = lcs['t_rest']
     return pops, meta, bands, t_obs, t_rest
 
@@ -251,6 +259,11 @@ def main(tag='fiducial'):
                 log_tvisc_full=wq(np.log10(np.maximum(d_['tvisc'][~d_['partial']], 1e-3)), w_[~d_['partial']]),
                 log_tvisc_partial=wq(np.log10(np.maximum(d_['tvisc'][d_['partial']], 1e-3)), w_[d_['partial']]),
                 frac_tvisc_gt_tpk=float((w_ * (d_['tvisc'] > d_['tpk'])).sum()))
+        if 'tbb_fit' in d_:     # constant-temperature blackbody fits, as Yao et al. (2023) measure them
+            R[p_].update(
+                logtbb_fit=wq(np.log10(d_['tbb_fit']), w_),
+                logtbb_fit_wide=wq(np.log10(d_['tbb_fit_wide']), w_),
+                logtbb_fit_peak=wq(np.log10(d_['tbb_fit_peak']), w_))
 
     # ------------------------------------------------------------ screen
     obscured = e['cosi'] < ps.F_OMEGA
@@ -369,7 +382,9 @@ def main(tag='fiducial'):
                 pm(E['thalf_g'], '%.0f'), pm(E['thalf_g_full'], '%.0f'), pm(E['thalf_g_partial'], '%.0f'), pm(Fd['thalf_g'], '%.0f'), pm(Fd['thalf_g_full'], '%.0f'), pm(Fd['thalf_g_partial'], '%.0f')),
             r'${\rm d}\ln L/{\rm d}\ln t$ (200--600 d) & %s & %s & %s & %s & %s & %s \\' % (
                 pm(E['slope']), pm(E['slope_full']), pm(E['slope_partial']), pm(Fd['slope']), pm(Fd['slope_full']), pm(Fd['slope_partial'])),
-            r'$T_{\rm ph}$ at peak ($10^{4}$~K) & %s & %s & %s & %s & %s & %s \\' % (pmk(E['tph_peak']), nd, nd, pmk(Fd['tph_peak']), nd, nd),
+            r'$T_{\rm bb}$, constant-$T$ fit ($10^{4}$~K) & %s & %s & %s & %s & %s & %s \\' % (
+                pmk([10 ** x for x in E['logtbb_fit']]), nd, nd, pmk([10 ** x for x in Fd['logtbb_fit']]), nd, nd),
+            r'$T_{\rm ph}$ at peak, model ($10^{4}$~K) & %s & %s & %s & %s & %s & %s \\' % (pmk(E['tph_peak']), nd, nd, pmk(Fd['tph_peak']), nd, nd),
             r'$\log E_{\rm rad}$ (erg) & %s & %s & %s & %s & %s & %s \\' % (pm(E['logerad'], '%.1f'), nd, nd, pm(Fd['logerad'], '%.1f'), nd, nd),
         ]
         open(os.path.join(ROOT, 'tables', 'lcstats_rows.tex'), 'w').write('\n'.join(lc_rows) + '\n')
@@ -449,7 +464,8 @@ def main(tag='fiducial'):
     # --- Fig: light-curve property distributions
     fig, ax = plt.subplots(2, 3, figsize=(7.2, 4.6))
     panels = [(np.log10(e['lpeak']), np.log10(f['lpeak']), r'$\log_{10} L_{\rm peak}$ (erg s$^{-1}$)', np.linspace(41, 45.5, 40)),
-              (e['absmag_g'], f['absmag_g'], r'$M_g$ at peak', np.linspace(-23, -13, 40)),
+              (np.log10(e['tbb_fit']), np.log10(f['tbb_fit']),
+               r'$\log_{10} T_{\rm bb}$ (K), constant-$T$ fit', np.linspace(3.5, 5.5, 40)),
               (np.log10(e['eddratio']), np.log10(f['eddratio']), r'$\log_{10} L_{\rm peak}/L_{\rm Edd}$', np.linspace(-3, 0.5, 40)),
               (np.log10(e['thalf_g']), np.log10(f['thalf_g']), r'$\log_{10} t_{1/2,\rm decline}$ ($g$ band; d)', np.linspace(0.5, 3.2, 40)),
               (e['slope'], f['slope'], r'late-time slope d$\ln L$/d$\ln t$', np.linspace(-4, 0, 40)),
@@ -463,7 +479,8 @@ def main(tag='fiducial'):
     y_Mg = -2.5 * np.log10(y_Lg / (C / 4741e-8) / (4 * np.pi * (10 * PC) ** 2)) - 48.6
     y_ledd = np.array([v['logLbb'] for v in yv]) - np.log10(1.26e38 * 10 ** np.array([v['logMBH'] for v in yv]))
     y_thalf = np.log10(np.array([v['t_decline'] for v in yv]))
-    observed = {0: y_logL, 1: y_Mg, 2: y_ledd, 3: y_thalf}
+    y_logT = np.array([v['logT'] for v in yv])   # their single constant blackbody temperature per event
+    observed = {0: y_logL, 1: y_logT, 2: y_ledd, 3: y_thalf}
     # actual volumetric normalizations: field at its theoretical rate, engine at the rate-matched
     # normalization, observed events at their summed 1/V_max rate densities (Mpc^-3 yr^-1)
     y_rate = np.array([v['w_1overV'] for v in yv])
@@ -482,7 +499,6 @@ def main(tag='fiducial'):
         if k == 0: a.set_ylim(3e-10, 3e-4)      # headroom for the legend
         lim = drawn_xlim(drawn)                 # end the axis on the distributions' own cutoffs
         if lim: a.set_xlim(*lim)
-        if k == 1: a.invert_xaxis()             # brighter (more negative) magnitudes to the right
     for a in ax[:, 0]:
         a.set_ylabel(r'd$\dot n$/d$x$ (Mpc$^{-3}$ yr$^{-1}$ dex$^{-1}$ or mag$^{-1}$)')
     ax[0, 0].legend(loc='upper left', fontsize=5.5, frameon=False)
