@@ -80,6 +80,9 @@ keys.update({
     'Meza:2025a': '2025ApJ...993...57M',           # RMHD accretion-flow formation, collision-powered outflows and L~5e44
     'Guo:2025a': '2025ApJ...979..235G',            # reverberation evidence for stream collision + delayed disk
     'Martire:2026a': '2026MNRAS.549g1021M',        # end-to-end IMBH TDE: wind-mediated near-Eddington emission, few e4 K
+    # the thermal UV/optical component as a fraction of an Eddington-limited total
+    'Thomsen:2022a': '2022ApJ...937L..28T',       # GRRMHD TDE disks at 7-24 mdot_Edd; L_BB a few-10% of L_bol
+    'Lu:2018a': '2018ApJ...865..128L',            # missing energy in the EUV
     # software acknowledgments
     'Astropy:2013a': '2013A&A...558A..33A',
     'Astropy:2018a': '2018AJ....156..123A',
