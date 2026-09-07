@@ -14,7 +14,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TAGS = ['fiducial', 'prompt', 'gaslimited', 'burstrelation', 'simple', 'young1', 'young0', 'KH13', 'miller',
-        'fiducial_p1.5', 'fiducial_p2']   # '<catalog>_p<value>' reruns a catalog with accretion exponent p
+        'fiducial_L1', 'fiducial_L0.1']   # '<catalog>_L<value>' reruns a catalog with the disk cap at <value> L_Edd
 
 
 def lcs_args(t):

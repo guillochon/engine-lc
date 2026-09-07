@@ -5,7 +5,7 @@ import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VARIANTS = [
-    ('fiducial', 'Fiducial (slowed accretion, resupplied disk, growing black holes)'),
+    ('fiducial', 'Fiducial (slow accretion, fed disk, growing black holes)'),
     ('prompt', 'Prompt circularization (no viscous delay)'),
     ('gaslimited', 'Gas-limited lifetime ($\\tau = t_{\\rm gas}$)'),
     ('burstrelation', 'Relation applies at the burst'),
@@ -14,6 +14,8 @@ VARIANTS = [
     ('young0', 'Old population only'),
     ('KH13', '\\citet{Kormendy:2013a} relation'),
     ('miller', '\\citet{Miller:2015a} occupation fraction'),
+    ('fiducial_L1', 'Disk cap at $L_{\\rm Edd}$ (no EUV fraction)'),
+    ('fiducial_L0.1', 'Disk cap at $0.1\\,L_{\\rm Edd}$'),
 ]
 
 

@@ -7,9 +7,9 @@ Ramirez-Ruiz (2015) dark-year map; the collision term is capped separately, so L
 Usage:  python run_lcs.py catalog_fiducial.npz [max_events] [--eddslope P] [--leddlim F] [--tag NAME]
 
 --eddslope sets the super-Eddington exponent p of the accretion term (L = L_Edd m/(1+m)^p; p = 1 is the
-harmonic cap), --leddlim sets the cap in units of L_Edd (the thermal UV/optical fraction of an
-Eddington-saturated flow; applies to both the accretion and the collision caps), and --tag names the
-output library (default: the catalog tag).
+harmonic cap), --leddlim sets the accretion-term cap in units of L_Edd (the thermal UV/optical fraction
+of an Eddington-saturated disk; the collision cap and the photosphere normalization stay at L_Edd), and
+--tag names the output library (default: the catalog tag).
 
 Must be run from the paper root so that MOSFiT picks up the local
 modules/observables/filterrules.json (Euclid and SPHEREx bands).
@@ -47,7 +47,7 @@ EFF_ACC_SCATTER = 0.3       # dex, log-normal event-to-event scatter, clipped to
 TVISC_SCATTER = 0.5         # dex, event-to-event scatter about the dark-year map
 PROMPT_OFFSET = -6.0        # dex offset that removes the viscous delay (prompt-circularization variant)
 EDDSLOPE = 1.0              # default super-Eddington exponent of the accretion term (harmonic cap)
-LEDDLIM = 1.0               # default cap in units of L_Edd
+LEDDLIM = 0.3               # default disk cap in units of L_Edd: the thermal UV/optical share of an Eddington-limited disk
 
 
 def make_model():
@@ -68,7 +68,7 @@ MAX_REDRAW = 12
 
 def run_population(m, pop, nmax=None, darkyear=True, seed=0, eddslope=EDDSLOPE, leddlim=LEDDLIM):
     m._modules['eddslope'].fix_value(float(eddslope))
-    m._modules['Leddlim'].fix_value(float(leddlim))
+    m._modules['Leddlimdisk'].fix_value(float(leddlim))   # disk (accretion) cap only; shock cap and photosphere stay at L_Edd
     rng = np.random.default_rng(seed)
     names = m.free_parameter_names()
     n = len(pop['mh']) if nmax is None else min(nmax, len(pop['mh']))
