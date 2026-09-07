@@ -72,6 +72,14 @@ keys.update({
     'Piro:2020a': '2020ApJ...894....2P',           # wind-reprocessed transients, scattering-dominated temperature
     'Lu:2020a': '2020MNRAS.492..686L',             # collision-induced outflow reprocessing
     'Parkinson:2022a': '2022MNRAS.510.5426P',      # Monte Carlo wind reprocessing spectra
+    # collision-powered emission and the nozzle shock
+    'Jiang:2016b': '2016ApJ...830..125J',          # stream-stream collision radiation efficiency 2-7%
+    'Hu:2026a': '2026ApJ...996L..21H',             # converged nozzle-shock dissipation 4e-5 of orbital energy
+    'Andalman:2026a': '2026OJAp....962785A',       # nozzle shock insufficient to circularize
+    'Kubli:2026a': '2026ApJ...999L..40K',          # SPH-EXA: pre-self-intersection dissipation vanishes with resolution
+    'Meza:2025a': '2025ApJ...993...57M',           # RMHD accretion-flow formation, collision-powered outflows and L~5e44
+    'Guo:2025a': '2025ApJ...979..235G',            # reverberation evidence for stream collision + delayed disk
+    'Martire:2026a': '2026MNRAS.549g1021M',        # end-to-end IMBH TDE: wind-mediated near-Eddington emission, few e4 K
     # software acknowledgments
     'Astropy:2013a': '2013A&A...558A..33A',
     'Astropy:2018a': '2018AJ....156..123A',

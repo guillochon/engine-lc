@@ -5,12 +5,11 @@ import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VARIANTS = [
-    ('fiducial', 'Fiducial (dark year, resupplied disk, growing holes)'),
-    ('prompt', 'Prompt circularization (fitted $T_{\\rm visc}$)'),
+    ('fiducial', 'Fiducial (slowed accretion, resupplied disk, growing black holes)'),
+    ('prompt', 'Prompt circularization (no viscous delay)'),
     ('gaslimited', 'Gas-limited lifetime ($\\tau = t_{\\rm gas}$)'),
     ('burstrelation', 'Relation applies at the burst'),
     ('simple', 'Simple (all three of the above)'),
-    ('scaleeff', '$\\epsilon \\propto M_{\\rm h}$'),
     ('young1', 'Burst population only'),
     ('young0', 'Old population only'),
     ('KH13', '\\citet{Kormendy:2013a} relation'),

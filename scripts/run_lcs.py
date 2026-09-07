@@ -1,4 +1,8 @@
-"""Generate light curves for a population catalog with the MOSFiT TDE model.
+"""Generate light curves for a population catalog with the MOSFiT ``tde_shock`` model:
+prompt collision-powered emission at pericenter (radiated fraction f_rad of the stream's
+kinetic energy, so that epsilon_shock = f_rad r_g / r_p; Jiang, Guillochon & Loeb 2016)
+plus accretion at epsilon_acc delayed by the viscous time of the Guillochon &
+Ramirez-Ruiz (2015) dark-year map, with the Eddington cap applied to the sum.
 
 Usage:  python run_lcs.py catalog_fiducial.npz [max_events]
 
@@ -9,6 +13,7 @@ Writes products/lcs_<tag>.npz.
 import os
 import sys
 import time
+import zlib
 
 import numpy as np
 from astropy.cosmology import FlatLambdaCDM
@@ -30,10 +35,16 @@ INSTS = ['UVOT'] + ['LSST'] * 6 + ['VIS'] + ['NISP'] * 3 + ['WFI'] * 5 + ['WISE'
 T_OBS = np.concatenate([[0.5], np.logspace(0, np.log10(36525.0), 149)])   # to 100 yr, so the rest-frame flare is followed for decades
 T_REST_GRID = np.logspace(-1, np.log10(40000.0), 200)   # rest-frame days for bolometric storage (110 yr)
 
+MODEL = 'tde_shock'
+FRAD_RANGE = (0.02, 0.07)   # radiated fraction of the collision kinetic energy (Jiang et al. 2016: 2-7%)
+EFF_ACC = 0.1               # accretion efficiency of the delayed component
+TVISC_SCATTER = 0.5         # dex, event-to-event scatter about the dark-year map
+PROMPT_OFFSET = -6.0        # dex offset that removes the viscous delay (prompt-circularization variant)
+
 
 def make_model():
     f = Fitter()
-    m = mosfit.model.Model(model='tde', fitter=f)
+    m = mosfit.model.Model(model=MODEL, fitter=f)
     data = f.generate_dummy_data('engine', max_time=T_OBS[-1], time_list=list(T_OBS),
                                  band_list=BANDS, band_instruments=INSTS)
     m.load_data(data, event_name='engine', smooth_times=0, band_list=BANDS, band_instruments=INSTS,
@@ -42,10 +53,13 @@ def make_model():
 
 
 T_PEAK_MIN = 1.0e4   # K; observed optical TDEs have blackbody temperatures above this at peak
+V_PHOT_MAX = 0.5     # MOSFiT tde_constraints: photosphere inside a 0.5c wind launched at first fallback
+G_CGS, C_CGS, MSUN_CGS = 6.674e-8, 2.99792458e10, 1.989e33
 MAX_REDRAW = 12
 
 
-def run_population(m, pop, nmax=None, scale_eff=False, darkyear=False):
+def run_population(m, pop, nmax=None, darkyear=True, seed=0):
+    rng = np.random.default_rng(seed)
     names = m.free_parameter_names()
     n = len(pop['mh']) if nmax is None else min(nmax, len(pop['mh']))
     mags = np.full((n, len(T_OBS), len(BANDS)), np.nan, dtype=np.float16)   # 0.02 mag precision suffices
@@ -53,14 +67,19 @@ def run_population(m, pop, nmax=None, scale_eff=False, darkyear=False):
     tph = np.zeros((n, len(T_OBS)), dtype=np.float32)
     rph = np.zeros((n, len(T_OBS)), dtype=np.float32)
     scal = {k: np.zeros(n) for k in ['lpeak', 'tpeak', 'ledd', 'dmbound', 'beta', 'rstar', 'tfallback', 'erad',
-                                     'eff', 'rph0', 'lph', 'tvisc', 'nh', 'nredraw']}
+                                     'frad', 'eff', 'shock_eff', 'rp_over_rg', 'tvisc', 'tviscoffset',
+                                     'rph0', 'lph', 'nh', 'nredraw', 'rphot_ratio']}
+    # per-event draws for the emission model: f_rad log-uniform over the simulated range, and the
+    # dex offset of the viscous time about the dark-year map (or none, for prompt circularization)
+    frad_all = 10 ** rng.uniform(np.log10(FRAD_RANGE[0]), np.log10(FRAD_RANGE[1]), n)
+    off_all = TVISC_SCATTER * rng.standard_normal(n) if darkyear else np.full(n, PROMPT_OFFSET)
     t0 = time.time()
-    gi = BANDS.index('g')
     for i in range(n):
         z = float(pop['z'][i])
         m._modules['redshift'].fix_value(z)
         m._modules['lumdist'].fix_value(float(cosmo.luminosity_distance(z).value))
-        nuis = dict(efficiency=float(pop['eff'][i]), Tviscous=float(pop['tvisc'][i]), Rph0=float(pop['rph0'][i]),
+        m._modules['tviscoffset'].fix_value(float(off_all[i]))
+        nuis = dict(frad=float(frad_all[i]), efficiency=EFF_ACC, Rph0=float(pop['rph0'][i]),
                     lphoto=float(pop['lph'][i]), nhhost=float(pop['nh'][i]))
         o = None
         for attempt in range(MAX_REDRAW + 1):
@@ -76,17 +95,25 @@ def run_population(m, pop, nmax=None, scale_eff=False, darkyear=False):
             ab = np.asarray(o['all_bands'])
             sel = ab == 'g'
             tpk = np.asarray(o['temperaturephot'])[sel][np.nanargmin(mo[sel])]
-            if tpk >= T_PEAK_MIN or attempt == MAX_REDRAW:
+            # the photosphere must stay inside the envelope MOSFiT fits enforce (tde_constraints):
+            # a relativistic wind from the circularization radius, 2 r_p + v_max c t + 2 a(t)
+            t_rest = np.asarray(o['all_times'], dtype=float)[sel] / (1 + z) * 86400.0
+            a_t = (G_CGS * float(pop['mh'][i]) * MSUN_CGS * (np.maximum(t_rest, 0.0) / np.pi) ** 2) ** (1.0 / 3.0)
+            rmax = 2 * o['rp'] + V_PHOT_MAX * C_CGS * np.maximum(t_rest, 0.0) + 2 * a_t
+            rratio = float(np.nanmax(np.asarray(o['radiusphot'])[sel] / rmax))
+            if (tpk >= T_PEAK_MIN and rratio <= 1.0) or attempt == MAX_REDRAW:
                 break
             # photosphere parameters fitted at low Eddington ratio do not transfer to this event: redraw
-            eff, rph0, lph, tv, nh = ps.sample_nuisance(1, np.array([pop['mh'][i]]), scale_eff, darkyear,
-                                                        np.array([pop['mstar'][i]]), np.array([pop['beta'][i]]))
-            nuis = dict(efficiency=float(eff[0]), Tviscous=float(tv[0]), Rph0=float(rph0[0]), lphoto=float(lph[0]), nhhost=float(nh[0]))
+            _, rph0, lph, _, nh = ps.sample_nuisance(1, np.array([pop['mh'][i]]), False, False,
+                                                     np.array([pop['mstar'][i]]), np.array([pop['beta'][i]]))
+            nuis.update(Rph0=float(rph0[0]), lphoto=float(lph[0]), nhhost=float(nh[0]))
         if o is None:
             continue
-        scal['nredraw'][i] = attempt
-        for k, kk in [('eff', 'efficiency'), ('rph0', 'Rph0'), ('lph', 'lphoto'), ('tvisc', 'Tviscous'), ('nh', 'nhhost')]:
-            scal[k][i] = nuis[kk]
+        scal['nredraw'][i] = attempt; scal['rphot_ratio'][i] = rratio
+        scal['frad'][i] = nuis['frad']; scal['eff'][i] = nuis['efficiency']
+        scal['rph0'][i] = nuis['Rph0']; scal['lph'][i] = nuis['lphoto']; scal['nh'][i] = nuis['nhhost']
+        scal['shock_eff'][i] = o['shock_efficiency']; scal['rp_over_rg'][i] = o['rp_over_rg']
+        scal['tvisc'][i] = o['Tviscous']; scal['tviscoffset'][i] = off_all[i]
         at = np.asarray(o['all_times'], dtype=float)
         for j, b in enumerate(BANDS):
             sel = ab == b
@@ -115,19 +142,18 @@ if __name__ == '__main__':
     nmax = int(sys.argv[2]) if len(sys.argv) > 2 else None
     cat = np.load(os.path.join(ROOT, 'products', catpath), allow_pickle=True)
     tag = str(cat['tag'])
-    scale_eff = bool(cat['scale_eff'])
-    darkyear = bool(cat['darkyear']) if 'darkyear' in cat.files else False
+    darkyear = bool(cat['darkyear']) if 'darkyear' in cat.files else True
+    if 'scale_eff' in cat.files and bool(cat['scale_eff']):
+        raise SystemExit('the efficiency-scaling variant is superseded by the tde_shock model (epsilon = f_rad r_g / r_p)')
     m = make_model()
-    if darkyear:
-        # the tde prior caps T_viscous at 100 d; slowed circularization needs up to ~1e5 d
-        m._modules['Tviscous']._max_value = np.log(1e5)
     out = {}
     for pop in ['eng', 'field']:
         d = {k[len(pop) + 1:]: cat[k] for k in cat.files if k.startswith(pop + '_')}
         print('population', pop, len(d['mh']))
-        res = run_population(m, d, nmax, scale_eff, darkyear)
+        res = run_population(m, d, nmax, darkyear, seed=zlib.crc32((tag + pop).encode()))
         for k, v in res.items():
             out[pop + '_' + k] = v
     out['bands'] = np.array(BANDS); out['t_obs'] = T_OBS; out['t_rest'] = T_REST_GRID
+    out['model'] = MODEL; out['frad_range'] = np.array(FRAD_RANGE); out['eff_acc'] = EFF_ACC
     np.savez_compressed(os.path.join(ROOT, 'products', 'lcs_%s.npz' % tag), **out)
     print('done')

@@ -13,7 +13,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TAGS = ['fiducial', 'prompt', 'gaslimited', 'burstrelation', 'simple', 'scaleeff', 'young1', 'young0', 'KH13', 'miller']
+TAGS = ['fiducial', 'prompt', 'gaslimited', 'burstrelation', 'simple', 'young1', 'young0', 'KH13', 'miller']
 LOG = os.path.join(ROOT, 'products', 'run_all.log')
 
 
@@ -30,15 +30,20 @@ def run(args, out):
     return r.returncode
 
 
-def stage(name, tags, args_for, workers):
+STAGGER = 45.0   # s between job starts: MOSFiT rewrites its filter cache on load, and concurrent loads race
+
+
+def stage(name, tags, args_for, workers, stagger=0.0):
     """Run one stage for every tag, `workers` at a time, and stop the pipeline on any failure."""
-    def one(t):
+    def one(it):
+        i, t = it
+        time.sleep(stagger * min(i, workers - 1))
         log('%s %s' % (name, t))
         rc = run(args_for(t), os.path.join(ROOT, 'products', '%s_%s.txt' % (name, t)))
         log('%s %s exit %d' % (name, t, rc))
         return rc
     with ThreadPoolExecutor(max_workers=max(1, min(workers, len(tags)))) as ex:
-        codes = list(ex.map(one, tags))
+        codes = list(ex.map(one, list(enumerate(tags))))
     if any(codes):
         log('FAILED %s' % name)
         sys.exit(1)
@@ -52,7 +57,7 @@ if __name__ == '__main__':
     tags = [a for a in argv if a not in skip] or TAGS
     log('start %s (workers=%d)' % (' '.join(tags), workers))
     if not skip_lcs:
-        stage('run_lcs', tags, lambda t: ['scripts/run_lcs.py', 'catalog_%s.npz' % t], workers)
+        stage('run_lcs', tags, lambda t: ['scripts/run_lcs.py', 'catalog_%s.npz' % t], workers, stagger=STAGGER)
     stage('postprocess', tags, lambda t: ['scripts/postprocess.py', t], workers)
     log('variant_table')
     rc = run(['scripts/variant_table.py'], LOG)

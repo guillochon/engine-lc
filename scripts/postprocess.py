@@ -220,6 +220,17 @@ def main(tag='fiducial'):
         tpeak=wq(f['tpk'], wf), trise=wq(f['trise'], wf), thalf=wq(f['thalf'], wf), slope=wq(f['slope'], wf),
         slope_partial=wq(f['slope'][f['partial']], wf[f['partial']]), slope_full=wq(f['slope'][~f['partial']], wf[~f['partial']]),
         absmag_g=wq(f['absmag_g'], wf), tph_peak=wq(f['tph_peak'], wf), logerad=wq(np.log10(f['erad']), wf))
+    for p_, d_, w_ in [('eng', e, we), ('field', f, wf)]:
+        if 'shock_eff' in d_:   # tde_shock emission model: collision efficiency, geometry, and delay per event
+            R[p_].update(
+                log_shock_eff=wq(np.log10(d_['shock_eff']), w_),
+                log_shock_eff_full=wq(np.log10(d_['shock_eff'][~d_['partial']]), w_[~d_['partial']]),
+                log_shock_eff_partial=wq(np.log10(d_['shock_eff'][d_['partial']]), w_[d_['partial']]),
+                rp_over_rg=wq(d_['rp_over_rg'], w_), frad=wq(d_['frad'], w_),
+                log_tvisc=wq(np.log10(np.maximum(d_['tvisc'], 1e-3)), w_),
+                log_tvisc_full=wq(np.log10(np.maximum(d_['tvisc'][~d_['partial']], 1e-3)), w_[~d_['partial']]),
+                log_tvisc_partial=wq(np.log10(np.maximum(d_['tvisc'][d_['partial']], 1e-3)), w_[d_['partial']]),
+                frac_tvisc_gt_tpk=float((w_ * (d_['tvisc'] > d_['tpk'])).sum()))
 
     # ------------------------------------------------------------ screen
     obscured = e['cosi'] < ps.F_OMEGA

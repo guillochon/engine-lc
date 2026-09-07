@@ -14,7 +14,7 @@ is produced by the commands below.
 | `products/popsynth_summary.json`, `products/engine_window_f022.json` | Population-synthesis summary and the engine equilibrium at the window midpoint (Table 1) |
 | `scripts/engine_window_exponents.py` | Table 1 from the `tde-engine` equilibrium solver |
 | `scripts/popsynth.py` | Population synthesis: engine and field Monte Carlo catalogs |
-| `scripts/run_lcs.py` | MOSFiT light curves for a catalog |
+| `scripts/run_lcs.py` | MOSFiT `tde_shock` light curves for a catalog (f_rad log-uniform 0.02-0.07, epsilon_acc = 0.1, dark-year viscous times with 0.5 dex scatter, photosphere kept inside the MOSFiT wind envelope) |
 | `scripts/postprocess.py` | Disk screen, infrared echoes, luminosity functions, survey yields, figures, table rows |
 | `scripts/variant_table.py` | Collects the variant results into `tables/variant_rows.tex` |
 | `scripts/run_all.py` | Runs steps 3-4 below for every catalog, several catalogs at a time (`--workers N`) |
@@ -27,7 +27,9 @@ is produced by the commands below.
 ## Environment
 
 * Python 3.11+ with the packages in `requirements.txt`.
-* MOSFiT 2.0 from the `uv-package-management` branch of https://github.com/guillochon/MOSFiT
+* MOSFiT 2.0 from the `tde-shock` branch of https://github.com/guillochon/MOSFiT (which adds the
+  two-component `tde_shock` model used here: prompt collision-powered emission with
+  epsilon = f_rad r_g/r_p plus viscously delayed accretion)
   (the viscous-delay recurrence of PR 250 is required), installed with `uv sync`; `numba` is
   needed for the viscous kernel. Below, `PY` is that environment's Python.
 * The engine equilibrium solver from https://github.com/guillochon/tde-engine, checked out next
@@ -48,13 +50,13 @@ TDE_ENGINE_REPO=../tde-engine python scripts/engine_window_exponents.py
 # 2. Population synthesis: fiducial (20000 events per population) and every variant (8000 each)
 PY scripts/popsynth.py
 
-# 3. MOSFiT light curves, one library per catalog (~0.012 s per event)
-for c in fiducial prompt gaslimited burstrelation simple scaleeff young1 young0 KH13 miller; do
+# 3. MOSFiT light curves, one library per catalog (~0.02 s per event)
+for c in fiducial prompt gaslimited burstrelation simple young1 young0 KH13 miller; do
   PY scripts/run_lcs.py catalog_$c.npz
 done
 
 # 4. Post-processing: screen, echoes, statistics, figures (fiducial only), table rows
-for c in fiducial prompt gaslimited burstrelation simple scaleeff young1 young0 KH13 miller; do
+for c in fiducial prompt gaslimited burstrelation simple young1 young0 KH13 miller; do
   PY scripts/postprocess.py $c
 done
 python scripts/variant_table.py

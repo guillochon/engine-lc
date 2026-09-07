@@ -310,7 +310,6 @@ if __name__ == '__main__':
         'prompt': dict(FID, darkyear=False),
         'gaslimited': dict(FID, lifetime='gas'),
         'burstrelation': dict(FID, growth='burst'),
-        'scaleeff': dict(FID, scale_eff=True),
         'young1': dict(FID, f_young=1.0),
         'young0': dict(FID, f_young=0.0),
         'KH13': dict(FID, relation='KH13'),
