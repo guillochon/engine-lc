@@ -75,7 +75,7 @@ def abmag_from_LT(L, T, lam_obs_A, z):
 
 
 def load(tag):
-    cat_tag = tag if os.path.exists(os.path.join(ROOT, 'products', 'catalog_%s.npz' % tag)) else tag.split('_p')[0]
+    cat_tag = tag if os.path.exists(os.path.join(ROOT, 'products', 'catalog_%s.npz' % tag)) else tag.split('_')[0]
     cat = np.load(os.path.join(ROOT, 'products', 'catalog_%s.npz' % cat_tag), allow_pickle=True)
     lcs = np.load(os.path.join(ROOT, 'products', 'lcs_%s.npz' % tag), allow_pickle=True)
     pops = {}

@@ -4,10 +4,12 @@ kinetic energy, so that epsilon_shock = f_rad r_g / r_p; Jiang, Guillochon & Loe
 plus accretion at epsilon_acc (log-normal about 0.03), Eddington-capped and then delayed by the viscous time of the Guillochon &
 Ramirez-Ruiz (2015) dark-year map; the collision term is capped separately, so L <= 2 L_Edd.
 
-Usage:  python run_lcs.py catalog_fiducial.npz [max_events] [--eddslope P] [--tag NAME]
+Usage:  python run_lcs.py catalog_fiducial.npz [max_events] [--eddslope P] [--leddlim F] [--tag NAME]
 
 --eddslope sets the super-Eddington exponent p of the accretion term (L = L_Edd m/(1+m)^p; p = 1 is the
-harmonic cap), and --tag names the output library (default: the catalog tag).
+harmonic cap), --leddlim sets the cap in units of L_Edd (the thermal UV/optical fraction of an
+Eddington-saturated flow; applies to both the accretion and the collision caps), and --tag names the
+output library (default: the catalog tag).
 
 Must be run from the paper root so that MOSFiT picks up the local
 modules/observables/filterrules.json (Euclid and SPHEREx bands).
@@ -45,6 +47,7 @@ EFF_ACC_SCATTER = 0.3       # dex, log-normal event-to-event scatter, clipped to
 TVISC_SCATTER = 0.5         # dex, event-to-event scatter about the dark-year map
 PROMPT_OFFSET = -6.0        # dex offset that removes the viscous delay (prompt-circularization variant)
 EDDSLOPE = 1.0              # default super-Eddington exponent of the accretion term (harmonic cap)
+LEDDLIM = 1.0               # default cap in units of L_Edd
 
 
 def make_model():
@@ -63,8 +66,9 @@ G_CGS, C_CGS, MSUN_CGS = 6.674e-8, 2.99792458e10, 1.989e33
 MAX_REDRAW = 12
 
 
-def run_population(m, pop, nmax=None, darkyear=True, seed=0, eddslope=EDDSLOPE):
+def run_population(m, pop, nmax=None, darkyear=True, seed=0, eddslope=EDDSLOPE, leddlim=LEDDLIM):
     m._modules['eddslope'].fix_value(float(eddslope))
+    m._modules['Leddlim'].fix_value(float(leddlim))
     rng = np.random.default_rng(seed)
     names = m.free_parameter_names()
     n = len(pop['mh']) if nmax is None else min(nmax, len(pop['mh']))
@@ -147,9 +151,10 @@ def run_population(m, pop, nmax=None, darkyear=True, seed=0, eddslope=EDDSLOPE):
 if __name__ == '__main__':
     argv = sys.argv[1:]
     eddslope = float(argv[argv.index('--eddslope') + 1]) if '--eddslope' in argv else EDDSLOPE
+    leddlim = float(argv[argv.index('--leddlim') + 1]) if '--leddlim' in argv else LEDDLIM
     out_tag = argv[argv.index('--tag') + 1] if '--tag' in argv else None
     skip = set()
-    for flag in ('--eddslope', '--tag'):
+    for flag in ('--eddslope', '--leddlim', '--tag'):
         if flag in argv:
             skip |= {flag, argv[argv.index(flag) + 1]}
     pos = [a for a in argv if a not in skip]
@@ -166,10 +171,10 @@ if __name__ == '__main__':
     for pop in ['eng', 'field']:
         d = {k[len(pop) + 1:]: cat[k] for k in cat.files if k.startswith(pop + '_')}
         print('population', pop, len(d['mh']))
-        res = run_population(m, d, nmax, darkyear, seed=zlib.crc32((tag + pop).encode()), eddslope=eddslope)
+        res = run_population(m, d, nmax, darkyear, seed=zlib.crc32((tag + pop).encode()), eddslope=eddslope, leddlim=leddlim)
         for k, v in res.items():
             out[pop + '_' + k] = v
     out['bands'] = np.array(BANDS); out['t_obs'] = T_OBS; out['t_rest'] = T_REST_GRID
-    out['model'] = MODEL; out['frad_range'] = np.array(FRAD_RANGE); out['eff_acc'] = EFF_ACC; out['eff_acc_scatter'] = EFF_ACC_SCATTER; out['eddslope'] = eddslope
+    out['model'] = MODEL; out['frad_range'] = np.array(FRAD_RANGE); out['eff_acc'] = EFF_ACC; out['eff_acc_scatter'] = EFF_ACC_SCATTER; out['eddslope'] = eddslope; out['leddlim'] = leddlim
     np.savez_compressed(os.path.join(ROOT, 'products', 'lcs_%s.npz' % out_tag), **out)
     print('done')

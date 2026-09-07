@@ -18,10 +18,17 @@ TAGS = ['fiducial', 'prompt', 'gaslimited', 'burstrelation', 'simple', 'young1',
 
 
 def lcs_args(t):
-    if '_p' in t:
-        base, p = t.split('_p')
-        return ['scripts/run_lcs.py', 'catalog_%s.npz' % base, '--eddslope', p, '--tag', t]
-    return ['scripts/run_lcs.py', 'catalog_%s.npz' % t]
+    # '<catalog>[_p<eddslope>][_L<leddlim>]' reruns a catalog with those emission parameters
+    parts = t.split('_')
+    args = ['scripts/run_lcs.py', 'catalog_%s.npz' % parts[0]]
+    for tok in parts[1:]:
+        if tok.startswith('p'):
+            args += ['--eddslope', tok[1:]]
+        elif tok.startswith('L'):
+            args += ['--leddlim', tok[1:]]
+    if len(parts) > 1:
+        args += ['--tag', t]
+    return args
 LOG = os.path.join(ROOT, 'products', 'run_all.log')
 
 
