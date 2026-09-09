@@ -906,5 +906,6 @@
    11.59230209218774
   ]
  },
- "field_rescale_to_observed": 0.07018020062969194
+ "field_rescale_to_observed": 0.07018020062969194,
+ "field_rescale_nonpsb": 0.046786800419794626
 }

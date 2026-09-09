@@ -410,6 +410,11 @@ def main(tag='fiducial'):
                 ('%.2f' % pf) if pf is not None else r'\nodata'))
         open(os.path.join(ROOT, 'tables', 'yield_rows.tex'), 'w').write('\n'.join(rows) + '\n')
         R['field_rescale_to_observed'] = fobs
+        # The loss-cone fit is a rate of disruptions, not of observable flares: the
+        # over-representation of post-starburst hosts requires ordinary nuclei to fall
+        # short of it (Section 4.1).  Post-starbursts supply a third of the observed
+        # rate, so the field is left with the other two thirds.
+        R['field_rescale_nonpsb'] = R['ndot_psb_observed'] * 2 / meta['ndot_field']
 
     json.dump(R, open(os.path.join(ROOT, 'products', 'results_%s.json' % tag), 'w'), indent=1, default=float)
 
@@ -573,9 +578,11 @@ def main(tag='fiducial'):
     # normalization, observed events at their summed 1/V_max rate densities (Mpc^-3 yr^-1)
     y_rate = np.array([v['w_1overV'] for v in yv])
     wf_abs = wf * meta['ndot_field']; we_abs = we * meta['ndot_eng'] * R['fspark_lam_needed']
+    fsupp = R['field_rescale_to_observed']   # a strict upper bound: the whole observed optical rate
     for k, (a, (xe, xf, lab, bins)) in enumerate(zip(ax.ravel(), panels)):
         bw = bins[1] - bins[0]
-        a.hist(xf, bins=bins, weights=wf_abs / bw, histtype='step', color='gray', lw=1.5, label='field (theoretical rate)')
+        a.hist(xf, bins=bins, weights=wf_abs / bw, histtype='step', color='gray', lw=1.5, label='field, loss-cone rate')
+        a.hist(xf, bins=bins, weights=fsupp * wf_abs / bw, histtype='step', color='gray', lw=1.0, ls=':', label='field, observed rate (upper limit)')
         a.hist(xe, bins=bins, weights=we_abs / bw, histtype='step', color='tab:orange', lw=1.5, label=r'engine ($\dot n_{\rm eng}=10^{-7}$)')
         a.hist(xe[e['partial']], bins=bins, weights=we_abs[e['partial']] / bw, histtype='stepfilled', color='tab:orange', alpha=0.25, label='engine, partial')
         drawn = [(xf, wf_abs, bins), (xe, we_abs, bins)]
@@ -596,7 +603,7 @@ def main(tag='fiducial'):
     fig, ax = plt.subplots(1, 2, figsize=(7.2, 4.0))   # tall enough for square panels
     bins = np.linspace(-23, -13, 26)
     drawn = {0: [], 1: []}
-    for d, w, c, lab in [(f, wf * meta['ndot_field'], 'gray', 'field'), (e, we * meta['ndot_eng'] * R['fspark_lam_needed'], 'tab:orange', r'engine ($\dot n_{\rm eng}=10^{-7}$)')]:
+    for d, w, c, lab in [(f, wf * meta['ndot_field'], 'gray', 'field, loss-cone rate'), (e, we * meta['ndot_eng'] * R['fspark_lam_needed'], 'tab:orange', r'engine ($\dot n_{\rm eng}=10^{-7}$)')]:
         dm = 5 * np.log10(cosmo.luminosity_distance(d['z']).value * 1e5) - 2.5 * np.log10(1 + d['z'])
         for band, j, avs in [('g', 0, [0, 50]), ('W1', 1, [0, 50, 400])]:
             a = ax[j]
@@ -606,6 +613,13 @@ def main(tag='fiducial'):
                 a.hist(m, bins=bins, weights=w / (bins[1] - bins[0]), histtype='step', color=c, ls=ls, lw=1.5,
                        label=lab + (r', $A_V=%d$ in disk' % av if av else ''))
                 drawn[j].append((m, w, bins))
+    # the same field population at the share of the observed rate it can carry: the
+    # loss-cone fit counts disruptions, most of which never become observable flares
+    dmf = 5 * np.log10(cosmo.luminosity_distance(f['z']).value * 1e5) - 2.5 * np.log10(1 + f['z'])
+    for band, j in [('g', 0), ('W1', 1)]:
+        m = screened_peakmag(f, 0, band=band) - dmf
+        ax[j].hist(m, bins=bins, weights=fsupp * wf * meta['ndot_field'] / (bins[1] - bins[0]),
+                   histtype='step', color='gray', ls=':', lw=1.2, label='field, observed rate (upper limit)')
     # observed g-band rates for hosts associated with TDE post-starburst galaxies:
     # Yao et al. (2023) green-valley (mass-corrected u-r), and both halves of the
     # Ramsden et al. (2026) 50:50 split about the TDE-only M_BH--M_* relation
