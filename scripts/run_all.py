@@ -13,19 +13,32 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TAGS = ['fiducial', 'prompt', 'gaslimited', 'burstrelation', 'simple', 'young1', 'young0', 'KH13', 'miller',
-        'fiducial_L1', 'fiducial_L0.1']   # '<catalog>_L<value>' reruns a catalog with the disk cap at <value> L_Edd
+TAGS = ['fiducial', 'gaslimited', 'burstrelation', 'simple', 'young1', 'young0', 'KH13', 'miller',
+        'fiducial_y1', 'fiducial_L1', 'fiducial_L0.3']   # '<catalog>_L<value>' reruns a catalog with the
+# disk cap at <value> L_Edd, '_y1' with the dark-year viscous delay switched on
 
 
 def lcs_args(t):
-    # '<catalog>[_p<eddslope>][_L<leddlim>]' reruns a catalog with those emission parameters
+    # '<catalog>[_y<darkyear>][_p<eddslope>][_L<leddlim>][_s<tviscslope>][_q<fradslope>][_c<rcollmode>]
+    # [_d<rcolldisk>]'
+    # reruns a catalog with those emission parameters
     parts = t.split('_')
     args = ['scripts/run_lcs.py', 'catalog_%s.npz' % parts[0]]
     for tok in parts[1:]:
-        if tok.startswith('p'):
+        if tok.startswith('y'):
+            args += ['--darkyear', tok[1:]]
+        elif tok.startswith('p'):
             args += ['--eddslope', tok[1:]]
         elif tok.startswith('L'):
             args += ['--leddlim', tok[1:]]
+        elif tok.startswith('s'):
+            args += ['--tviscslope', tok[1:]]
+        elif tok.startswith('q'):
+            args += ['--fradslope', tok[1:]]
+        elif tok.startswith('c'):
+            args += ['--rcollmode', tok[1:]]
+        elif tok.startswith('d'):
+            args += ['--rcolldisk', tok[1:]]
     if len(parts) > 1:
         args += ['--tag', t]
     return args

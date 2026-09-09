@@ -449,17 +449,105 @@ def main(tag='fiducial'):
     area_det = wf[detf].sum() / wf.sum() * (bins[1] - bins[0]) / (bins[1] - bins[0])   # fraction of field rate detected
     hist_det = np.histogram(np.log10(f['mh'][detf]), bins=bins, weights=wf[detf] / wf.sum() * wf.sum() / max(wf[detf].sum(), 1e-30) * 0.999)[0]
     pmv *= hist_det.sum() * (bins[1] - bins[0]) / np.trapezoid(pmv, lm)
-    ax[1].plot(lm, pmv, color='tab:purple', ls=':', lw=1.4, label='observed TDE hosts (Mummery & van Velzen 2025)')
-    ax[1].set_xlabel(r'$\log_{10} M_{\rm h}/M_\odot$'); ax[1].set_ylabel('rate-weighted fraction per bin'); ax[1].legend(loc='center right', fontsize=5.5)
-    ax[1].text(0.97, 0.78, 'filled: Rubin $g<24$ subsample', transform=ax[1].transAxes, va='top', ha='right', fontsize=7)
+    ax[1].plot(lm, pmv, color='tab:purple', ls=':', lw=1.4, label='Mummery & van Velzen (2025)')
+    ax[1].set_xlabel(r'$\log_{10} M_{\rm h}/M_\odot$'); ax[1].set_ylabel('rate-weighted fraction per bin')
+    ax[1].set_ylim(0, 0.20)
+    ax[1].legend(loc='upper right', frameon=True, facecolor='white', framealpha=0.8,
+                 edgecolor='none', fontsize=6.4, labelspacing=0.32)
     ymax = np.histogram(np.log10(e['mh']), bins=bins, weights=we)[0].max()
-    if ymax > 0.3:
-        ax[1].set_ylim(0, 0.3)
-        ax[1].annotate(r'floor spike reaches %.2f' % ymax, xy=(np.log10(ps.M_FLOOR) + 0.05, 0.295),
-                       xytext=(np.log10(ps.M_FLOOR) + 0.55, 0.27), fontsize=7, va='center', ha='left',
+    if ymax > 0.20:
+        ax[1].annotate(r'floor spike reaches %.2f' % ymax, xy=(np.log10(ps.M_FLOOR) + 0.05, 0.195),
+                       xytext=(np.log10(ps.M_FLOOR) + 0.55, 0.17), fontsize=7, va='center', ha='left',
                        arrowprops=dict(arrowstyle='-', color='tab:orange', lw=0.8),
                        bbox=dict(facecolor='white', alpha=0.8, edgecolor='none', pad=1.15))
     fig.tight_layout(); fig.savefig(os.path.join(FIG, 'bhmf.pdf')); plt.close(fig)
+
+    # --- Fig: representative bolometric light curves (shock vs accretion; engine vs field)
+    def pick_event(d, mask=None, **log_targets):
+        n = len(d['lpeak'])
+        m = np.ones(n, dtype=bool) if mask is None else np.asarray(mask)
+        m &= np.isfinite(d['lpeak']) & (d['lpeak'] > 0)
+        ii = np.where(m)[0]
+        score = np.zeros(len(ii))
+        for key, val in log_targets.items():
+            x = np.log10(np.maximum(np.asarray(d[key][ii], dtype=float), 1e-30))
+            score += (x - val) ** 2
+        return int(ii[np.argmin(score)])
+
+    def wband(L, w, q):
+        n_t = L.shape[1]
+        out = np.full(n_t, np.nan)
+        for j in range(n_t):
+            x = np.maximum(L[:, j], 1e-30)
+            m = np.isfinite(x) & (w > 0)
+            if m.sum() < 20:
+                continue
+            xs = np.argsort(x[m]); cw = np.cumsum(w[m][xs]); cw /= cw[-1]
+            out[j] = np.interp(q / 100.0, cw, x[m][xs])
+        return out
+
+    i_eng = pick_event(e, mh=R['eng']['logmh'][1], lpeak=R['eng']['loglpeak'][1])
+    i_field = pick_event(f, mh=R['field']['logmh'][1], lpeak=R['field']['loglpeak'][1])
+    usable = (np.isfinite(e['tvisc']) & (e['mh'] > 5e5) & (e['mh'] < 8e6))
+    logL = np.log10(np.nanmax(e['lbol'].astype(float), axis=1))
+    usable &= np.isfinite(logL) & (logL > 40)
+    p8, p92 = np.percentile(logL[usable], [8, 92])
+    n_mid = 50
+    n_seq = n_mid + 2
+    picks, used = [], set()
+    for t in np.linspace(p92, p8, n_seq):   # bright (shock) to faint (accretion)
+        d = np.abs(logL - t)
+        d[~usable] = np.inf
+        for u in used:
+            d[u] = np.inf
+        j = int(np.argmin(d))
+        picks.append(j); used.add(j)
+    i_shock, i_acc = picks[0], picks[-1]
+    if len(picks) != n_seq:
+        raise RuntimeError(f'expected {n_seq} light curves (2 extrema + {n_mid} mid), got {len(picks)}')
+    fig, ax = plt.subplots(1, 2, figsize=(7.2, 2.6), sharey=True)
+    LEG = dict(loc='upper right', frameon=True, facecolor='white', framealpha=0.8,
+               edgecolor='none', fontsize=6.4, labelspacing=0.32)
+    n_p = len(picks)
+
+    def orange_to_blue(frac):
+        hsv0 = matplotlib.colors.rgb_to_hsv(np.array(matplotlib.colors.to_rgb('tab:orange')))
+        hsv1 = matplotlib.colors.rgb_to_hsv(np.array(matplotlib.colors.to_rgb('tab:blue')))
+        h0, h1 = float(hsv0[0]), float(hsv1[0])
+        if h1 > h0:   # wrap through red/magenta instead of green
+            h1 -= 1.0
+        h = (h0 + frac * (h1 - h0)) % 1.0
+        s = float(hsv0[1] + frac * (hsv1[1] - hsv0[1]))
+        v = float(hsv0[2] + frac * (hsv1[2] - hsv0[2]))
+        return matplotlib.colors.hsv_to_rgb((h, s, v))
+
+    for k, i in enumerate(picks):
+        frac = k / (n_p - 1)   # 0 = shock endpoint, 1 = accretion endpoint
+        extreme = i in (i_shock, i_acc)
+        lab = None
+        if i == i_shock:
+            lab = 'engine, shock-dominated (full)'
+        elif i == i_acc:
+            lab = 'engine, accretion-dominated (partial)'
+        ax[0].plot(t_rest, e['lbol'][i].astype(float), color=orange_to_blue(frac),
+                   lw=2.0 if extreme else 0.4, ls='-', label=lab,
+                   zorder=4 if i == i_shock else (3 if i == i_acc else 2))
+    Le, Lf = e['lbol'].astype(float), f['lbol'].astype(float)
+    ax[1].fill_between(t_rest, wband(Le, we, 16), wband(Le, we, 84),
+                       color='tab:orange', alpha=0.25, lw=0, label='engine 16--84%')
+    ax[1].fill_between(t_rest, wband(Lf, wf, 16), wband(Lf, wf, 84),
+                       color='gray', alpha=0.25, lw=0, label='field 16--84%')
+    ax[1].plot(t_rest, e['lbol'][i_eng].astype(float), color='tab:orange', lw=1.5,
+               label='median engine', zorder=3)
+    ax[1].plot(t_rest, f['lbol'][i_field].astype(float), color='gray', lw=1.5,
+               label='median field', zorder=3)
+    for a in ax:
+        a.set_xscale('log'); a.set_yscale('log')
+        a.set_xlim(0.5, 10**3.5); a.set_ylim(1e40, 3e45)
+        a.set_xlabel('rest-frame days after first fallback')
+        a.legend(**LEG)
+    ax[0].set_ylabel(r'$L$ (erg s$^{-1}$)')
+    fig.tight_layout(); fig.savefig(os.path.join(FIG, 'lcs.pdf')); plt.close(fig)
 
     # --- Fig: light-curve property distributions
     fig, ax = plt.subplots(2, 3, figsize=(7.2, 4.6))
@@ -505,7 +593,7 @@ def main(tag='fiducial'):
     fig.tight_layout(); fig.savefig(os.path.join(FIG, 'lcdist.pdf')); plt.close(fig)
 
     # --- Fig: luminosity functions (g and W1) with and without the screen
-    fig, ax = plt.subplots(1, 2, figsize=(7.2, 2.9))
+    fig, ax = plt.subplots(1, 2, figsize=(7.2, 4.0))   # tall enough for square panels
     bins = np.linspace(-23, -13, 26)
     drawn = {0: [], 1: []}
     for d, w, c, lab in [(f, wf * meta['ndot_field'], 'gray', 'field'), (e, we * meta['ndot_eng'] * R['fspark_lam_needed'], 'tab:orange', r'engine ($\dot n_{\rm eng}=10^{-7}$)')]:
@@ -518,33 +606,68 @@ def main(tag='fiducial'):
                 a.hist(m, bins=bins, weights=w / (bins[1] - bins[0]), histtype='step', color=c, ls=ls, lw=1.5,
                        label=lab + (r', $A_V=%d$ in disk' % av if av else ''))
                 drawn[j].append((m, w, bins))
-    # observed rest-frame g-band luminosity functions, converted to per-magnitude rate densities
-    Mg = np.linspace(-23, -13, 300)
-    Lnu = 4 * np.pi * (10 * PC) ** 2 * 10 ** (-(Mg + 48.6) / 2.5)          # erg/s/Hz
-    Lg = (C / 4741e-8) * Lnu                                               # nu L_nu at g
-    yao = 2.87e-7 * ((Lg / 1.36e43) ** 0.26 + (Lg / 1.36e43) ** 2.58) ** -1 * 0.4   # Yao et al. 2023, per mag
-    vv = 1.9e-7 * (Lg / 1e43) ** -1.6 * 0.4                                        # van Velzen 2018, per mag
-    m_yao = (Lg > 10 ** 42.5) & (Lg < 10 ** 45.0); m_vv = (Lg > 10 ** 42.3) & (Lg < 10 ** 44.8)
-    ax[0].plot(Mg[m_yao], yao[m_yao], color='tab:blue', lw=1.8, label='observed: Yao et al. (2023)')
-    ax[0].plot(Mg[m_vv], vv[m_vv], color='tab:blue', lw=1.2, ls='--', label='observed: van Velzen (2018)')
-    # the green-valley (post-starburst proxy) subset of the Yao et al. (2023) sample: each event weighted by
-    # its green-valley membership probability (their Eqs. 22-23) times its 1/V_max rate density, per magnitude
+    # observed g-band rates for hosts associated with TDE post-starburst galaxies:
+    # Yao et al. (2023) green-valley (mass-corrected u-r), and both halves of the
+    # Ramsden et al. (2026) 50:50 split about the TDE-only M_BH--M_* relation
+    def obs_points(x, w, bins):
+        dM = bins[1] - bins[0]
+        ctr = 0.5 * (bins[:-1] + bins[1:])
+        rate = np.zeros(len(ctr)); err = np.zeros(len(ctr))
+        idx = np.digitize(x, bins) - 1
+        for i in range(len(ctr)):
+            ww = w[(idx == i) & (idx >= 0) & (idx < len(ctr))]
+            if ww.size == 0:
+                continue
+            rate[i] = ww.sum() / dM
+            err[i] = np.sqrt(np.sum(ww ** 2)) / dM
+        ok = rate > 0
+        return ctr[ok], rate[ok], err[ok]
+
+    def plot_obs(xvals, w, edges, fmt, color, label):
+        xc, yc, ye = obs_points(xvals, w, edges)
+        ulim = ye >= yc * 0.999
+        det = ~ulim
+        kw = dict(color=color, ms=4, capsize=1.6, elinewidth=0.8, zorder=5)
+        if det.any():
+            ax[0].errorbar(xc[det], yc[det],
+                           yerr=[np.minimum(ye[det], yc[det] * 0.999), ye[det]],
+                           fmt=fmt, label=label, **kw)
+        if ulim.any():
+            n = np.count_nonzero(ulim)
+            ax[0].errorbar(xc[ulim], yc[ulim],
+                           yerr=[np.zeros(n), ye[ulim]],
+                           fmt=fmt, label=None if det.any() else label, **kw)
+            for xi, yi in zip(xc[ulim], yc[ulim]):
+                ax[0].annotate('', xy=(xi, yi * 10 ** (-0.45)), xytext=(xi, yi),
+                               arrowprops=dict(arrowstyle='-|>', color=color,
+                                               lw=0.8, mutation_scale=8),
+                               zorder=5)
+
     yao_ev = json.load(open(os.path.join(HERE, 'yao2023_sample.json')))
     gv = [v for v in yao_ev.values() if 'p_green' in v]
     gMg = -2.5 * np.log10(10 ** np.array([v['logLg'] for v in gv]) / (C / 4741e-8) / (4 * np.pi * (10 * PC) ** 2)) - 48.6
     gw = np.array([v['w_1overV'] * v['p_green'] for v in gv])
     gbins = np.arange(-22.5, -16.0, 1.0)
-    ax[0].hist(gMg, bins=gbins, weights=gw / (gbins[1] - gbins[0]), histtype='step', color='tab:green', lw=1.4, ls=':',
-               label=r'observed: green-valley hosts (Yao+23, $\sum p_{\rm green}/V_{\rm max}$)')
-    drawn[0].append((gMg, gw, gbins))
-    spans = {0: [(Mg[m_yao].min(), Mg[m_yao].max()), (Mg[m_vv].min(), Mg[m_vv].max())], 1: []}
+    plot_obs(gMg, gw, gbins - 0.22, 'o', 'tab:green', r'Yao+23: green-valley')
+    drawn[0].append((gMg, gw, gbins - 0.22))
+    rv = json.load(open(os.path.join(HERE, 'ramsden26_sample.json')))
+    rMg = np.array([v['Mg'] for v in rv.values()])
+    rw = np.array([v['w_1overV'] for v in rv.values()])
+    under = np.array([v['undermassive'] for v in rv.values()], dtype=bool)
+    for mask, fmt, color, lab, dx in [
+            (under, 's', 'sienna', r'Ramsden+26: undermassive (quenched)', 0.0),
+            (~under, 'D', 'steelblue', r'Ramsden+26: overmassive (star-forming)', 0.22)]:
+        plot_obs(rMg[mask], rw[mask], gbins + dx, fmt, color, lab)
+        drawn[0].append((rMg[mask], rw[mask], gbins + dx))
     for j, (a, lab) in enumerate(zip(ax, [r'peak $M_g$', r'peak $M_{W1}$'])):
-        a.set_yscale('log'); a.set_xlabel(lab); a.set_ylabel(r'd$\dot n$/d$M$ (Mpc$^{-3}$ yr$^{-1}$ mag$^{-1}$)'); a.set_ylim(1e-10, 1e-4)
-        lim = drawn_xlim(drawn[j], spans[j])    # end the axis on the luminosity functions' own cutoffs
+        a.set_yscale('log'); a.set_xlabel(lab); a.set_ylabel(r'd$\dot n$/d$M$ (Mpc$^{-3}$ yr$^{-1}$ mag$^{-1}$)')
+        a.set_ylim(10 ** -10.5, 1e-4)   # half a dex below the faintest observed point
+        a.set_box_aspect(1)
+        lim = drawn_xlim(drawn[j])    # end the axis on the luminosity functions' own cutoffs
         if lim: a.set_xlim(*lim)
         a.invert_xaxis()
-    # legends sit in the empty top two decades, clear of every curve
-    ax[0].legend(fontsize=5.5, loc='upper left', ncol=1, frameon=False); ax[1].legend(fontsize=5.5, loc='upper left', frameon=False)
+        a.legend(loc='upper left', frameon=True, facecolor='white', framealpha=0.8,
+                 edgecolor='none', fontsize=6.4, labelspacing=0.32)
     fig.tight_layout(); fig.savefig(os.path.join(FIG, 'lf.pdf')); plt.close(fig)
 
     # --- Fig: echo properties

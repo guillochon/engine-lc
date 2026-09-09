@@ -14,7 +14,7 @@ is produced by the commands below.
 | `products/popsynth_summary.json`, `products/engine_window_f022.json` | Population-synthesis summary and the engine equilibrium at the window midpoint (Table 1) |
 | `scripts/engine_window_exponents.py` | Table 1 from the `tde-engine` equilibrium solver |
 | `scripts/popsynth.py` | Population synthesis: engine and field Monte Carlo catalogs |
-| `scripts/run_lcs.py` | MOSFiT `tde_shock` light curves for a catalog (f_rad log-uniform 0.02-0.07; epsilon_acc log-normal about 0.03, the disk term capped at 0.3 L_Edd (the thermal UV/optical share of an Eddington-limited disk; `--leddlim`) before the dark-year viscous delay with 0.5 dex scatter, the collision term capped at L_Edd; photosphere kept inside the MOSFiT wind envelope) |
+| `scripts/run_lcs.py` | MOSFiT `tde_shock` light curves for a catalog (f_rad log-uniform 0.02-0.07; epsilon_acc log-normal about 0.03, the disk term capped at 0.1 L_Edd (the thermal UV/optical share of an Eddington-limited disk; `--leddlim`) and prompt, the collision term capped at L_Edd; `--darkyear 1` restores the dark-year viscous delay with 0.5 dex scatter; photosphere kept inside the MOSFiT wind envelope) |
 | `scripts/postprocess.py` | Disk screen, infrared echoes, luminosity functions, survey yields, figures, table rows |
 | `scripts/variant_table.py` | Collects the variant results into `tables/variant_rows.tex` |
 | `scripts/run_all.py` | Runs steps 3-4 below for every catalog, several catalogs at a time (`--workers N`); a tag `<catalog>_L<value>` reruns a catalog with the disk cap at `<value>` L_Edd (`run_lcs.py --leddlim`), and `_p<value>` with the super-Eddington exponent p (`--eddslope`) |
@@ -29,7 +29,7 @@ is produced by the commands below.
 * Python 3.11+ with the packages in `requirements.txt`.
 * MOSFiT 2.0 from the `tde-shock` branch of https://github.com/guillochon/MOSFiT (which adds the
   two-component `tde_shock` model used here: prompt collision-powered emission with
-  epsilon = f_rad r_g/r_p plus viscously delayed accretion)
+  epsilon = f_rad r_g/r_p plus capped accretion, prompt by default)
   (the viscous-delay recurrence of PR 250 is required), installed with `uv sync`; `numba` is
   needed for the viscous kernel. Below, `PY` is that environment's Python.
 * The engine equilibrium solver from https://github.com/guillochon/tde-engine, checked out next

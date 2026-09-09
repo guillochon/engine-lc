@@ -18,6 +18,9 @@ keys['Guillochon:2026a'] = '2026arXiv260828947G'
 keys.update({
     'Angus:2026a': '2026MNRAS.550g1285A',
     'Coughlin:2019a': '2019ApJ...883L..17C',
+    # the surviving core of a partial disruption is kicked to higher orbital energy
+    'Manukian:2013a': '2013ApJ...771L..28M',    # turbovelocity stars: kicks up to v_esc,*
+    'Gafton:2015a': '2015MNRAS.449..771G',      # relativistic amplification of the kick
     'Bortolas:2023a': '2023MNRAS.524.3026B',
     'Krolik:2020a': '2020ApJ...904...68K',
     'Chen:2021a': '2021ApJ...914...69C',
@@ -40,6 +43,7 @@ keys.update({
     'Ryu:2020c': '2020ApJ...904..100R',
     'Stone:2020a': '2020SSRv..216...35S',
     'Magill:2026a': '2026RASTI...5ag019M',
+    'Magill:2026b': '2026arXiv260818823M',      # F_det/sigma and F_det/<F> cuts vs AGN variability
     'Gezari:2021a': '2021ARA&A..59...21G',
     'vanVelzen:2021a': '2021ApJ...908....4V',
     'Steinberg:2024a': '2024Natur.625..463S',
@@ -50,6 +54,7 @@ keys.update({
     'Cufari:2022a': '2022ApJ...929L..20C',
     'Kiroglu:2023a': '2023ApJ...948...89K',
     'Ramsden:2022a': '2022MNRAS.515.1146R',
+    'Ramsden:2025a': '2025MNRAS.541.1218R',     # Hills + Malmquist flattening of TDE M_BH--bulge relation
     'Kroupa:2001a': '2001MNRAS.322..231K',
     'Speagle:2020a': '2020MNRAS.493.3132S',
     'Tout:1996a': '1996MNRAS.281..257T',
